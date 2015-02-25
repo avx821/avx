@@ -1,0 +1,10 @@
+package avionics;
+
+struct naviodata_t
+{
+    int64_t  timestamp;
+    double   imu_pos[3];
+    double   imu_vel[3];
+    double   imu_acc[3];
+    double   gps[3];
+}
