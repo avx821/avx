@@ -5,14 +5,14 @@
 */
 
 //Inclusions for lcm
-#include <lcm/lcm-cpp.hpp>
-#include "avionics/naviodata_t.hpp"
+#include "lcm-cpp.hpp"
+#include "naviodata_t.hpp"
 
 //Inclusions for GPS
-#include "Navio/Ublox.h"
+#include "Ublox.h"
 
 //Inclusions for IMU
-#include "Navio/MPU9250.h"
+#include "MPU9250.h"
 
 //What is this? I don't know.
 using namespace std;
@@ -54,9 +54,15 @@ int main(int argc, char ** argv)
 
 		//Store IMU data
 		imu.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-		data.imu_pos[] = {mx, my, mz};
-		data.imu_vel[] = {gx, gy, gz};
-		data.imu_acc[] = {ax, ay, az};
+		data.imu_pos[0] = mx;
+		data.imu_pos[1] = my;
+		data.imu_pos[2] = mz;
+		data.imu_vel[0] = gx;
+		data.imu_vel[1] = gy;
+		data.imu_vel[2] = gz;
+		data.imu_acc[0] = ax;
+		data.imu_acc[1] = ay;
+		data.imu_acc[2] = az;
 	    } else {
 		//We failed to get GPS data. Handle it.
 	    }
