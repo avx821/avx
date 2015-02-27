@@ -1,8 +1,7 @@
 import java.io.*;
-		import lcm.lcm.*;
+import lcm.lcm.*;
+import camera_log.*;
 
-		
-		//import camera_log.*;
 public class CameraSubscriber implements LCMSubscriber {
 	 LCM lcm; 
 	public CameraSubscriber() throws IOException {
@@ -15,10 +14,10 @@ public class CameraSubscriber implements LCMSubscriber {
 		        System.out.println("Received message on channel:  " + channel);
 		        try {
 		            if (channel.equals("CameraData")) {
-		            	cam_logger_t msg=new cam_logger_t(ins);
+		            	camera_logger_t msg=new camera_logger_t(ins);
 		                System.out.println("  timestamp    = " + msg.timestamp);
 		                System.out.println(" Concatenated Filename     = " + (msg.fileDir+msg.filename));
-		                System.out.println("File size: ["+msg._width+", "+msg._height+" ]");
+//		                System.out.println("File size: ["+msg._width+", "+msg._height+" ]");
 		                System.out.println("  Enabled      = '" + msg.enabled + "'");
 		            }
 		        } catch (IOException ex) {

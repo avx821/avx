@@ -1,4 +1,5 @@
 
+import camera_log.*; 
 import java.io.* ;
 import lcm.lcm.*; 
 public class SendCameraData {
@@ -7,7 +8,7 @@ public class SendCameraData {
 	{
         try {
             LCM lcm = LCM.getSingleton();
-            Camera_logger.cam_logger_t msg = new Camera_logger.cam_logger_t();
+            cam_logger_t msg = new cam_logger_t();
             // make this a static function that is called from camera
             msg.timestamp = System.nanoTime();
             msg.fileDir="~/avionics/src/lcm_types/camera_log/images/";
