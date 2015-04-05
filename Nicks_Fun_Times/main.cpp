@@ -5,12 +5,13 @@
 
 #include "Waypoint.h"
 #include "WaypointManager.h"
+#include "Waypoint_t.hpp"
 
 /**
  * Reads vehicle position and publishes autopilot instructions.
  */
 int main(int argc, const char* argv[]) {
-    
+
 	// Spin up LCM.
 	lcm::LCM lcm;
     if(!lcm.good()) {
@@ -79,6 +80,11 @@ public:
 
         // Publish the next waypoint to the autopilot.
         target = manager.getCurrentWaypoint();
+        std::vector goal = target.getWaypoint();
+        data.gps[0] = goal[0];
+        data.gps[1] = goal[1];
+        data.gps[2] = goal[2];
+        
     }
 
 private:
@@ -97,6 +103,11 @@ private:
          * Stores the vehicle's current location.
          */
         Waypoint vehicle;
+
+        /**
+         * LCM message storing the current target location.
+         */
+        Waypoint_t data;
 };
 
 
