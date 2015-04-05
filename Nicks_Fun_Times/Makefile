@@ -17,15 +17,9 @@ make: Waypoint.o Attitude.o WaypointManager.o VehicleState.o
 Waypoint.o:  
 	g++ -c Waypoint.cpp
 
-# Compiles the Attitude object file.
-Attitude.o:
-	g++ -c Attitude.cpp
-
 WaypointManager.o:
 	g++ -c WaypointManager.cpp
 
-VehicleState.o:
-	g++ -c VehicleState.cpp
 
 # Deletes all object files and binaries.
 #

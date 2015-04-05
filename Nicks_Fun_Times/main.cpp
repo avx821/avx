@@ -1,89 +1,102 @@
-#include <iostream>
-#include <exception>
 #include <vector>
 
 #include "lcm/lcm-cpp.hpp"
+#include "naviodata_t.hpp"
 
-#include "VehicleState.h"
+#include "Waypoint.h"
 #include "WaypointManager.h"
 
 /**
- * This main method reads vehicle state updates and publishes
- * autoflight instructions for waypoint navigation. 
+ * Reads vehicle position and publishes autopilot instructions.
  */
-int main( int argc, const char* argv[] )
-{
-	// We check to ensure LCM is funtioning properly.
+int main(int argc, const char* argv[]) {
+    
+	// Spin up LCM.
 	lcm::LCM lcm;
     if(!lcm.good()) {
         return 1;
     }
 
-	// We instantiate an understanding of the vehicle's current state.
-	VehicleState myVehicle;
-
-	// We also store a list of our current waypoints for navigation.
-	WaypointManager myWaypoints;
-	myWaypoints.setVehicle(myVehicle);
-
-	//
-	// TODO: insert preselected waypoints in
-	// waypoint manager for testing.
-	//
-
-	// We need to handle LCM messages to get GPS and IMU updates.
+	// Subscribe to Navio GPS LCM message.
 	MessageHandler handler;
 	handler.setVehicle(myVehicle);
+    lcm.subscribe("VehicleState", &Handler::handleMessage, &handler);
 
-	//
-	// TODO: loop publish autoflight instructions
-	//
-	
+    // Read LCM messages until we recieve an error.
+    while(lcm.handle() == 0) {
+        // We keep handling messages until an error is thrown.
+    }
 	return 0;
 }
 
 /**
- * Classs for handling LCM messages and parsing GPS and IMU data.
+ * Classs for handling LCM messages and parsing GPS data.
  */
 class MessageHandler {
-    public:
+public:
 
-    	/**
-    	 * Constructor.
-    	 */
-    	Handler() {}
+    /**
+     * Constructor.
+     */
+    Handler() {
 
-    	/**
-    	 * Destructor.
-    	 */
-        ~Handler() {}
+        // Instantiate test mission waypoints.
+        Waypoint waypoint_1;
+        Waypoint waypoint_2;
+        Waypoint waypoint_3;
 
-		/**
-	 	 * Sets the vehicle to update with new positions.  
-	 	 *
-	 	 * @param vehicle The vehicle to update.
-	 	 */
-        void setVehicle(VehicleState vehicle) {
-        	toUpdate = vehicle;
-        }
+        // Set mission waypoints.
+
+
+        // Feed waypoints into the waypoint manager.
+        std::vector<Waypoint> waypoints;
+        waypoints.push_back(waypoint_1);
+        waypoints.push_back(waypoint_2);
+        waypoints.push_back(waypoint_3);
+        manager.setWaypoints(waypoints);
+    }
+
+    /**
+     * Destructor.
+     */
+    ~Handler() {}
+
+    /**
+     * Parse GPS and IMU data to update the vehicle state.
+     */
+    void handleMessage(const lcm::ReceiveBuffer* rbuf,
+                       const std::string& chan, 
+                       const naviodata_t* msg)
+    {
+
+        // Update vehicle location.
+        vehicle.setWaypoint(msg->gps[0], 
+                            msg->gps[1], 
+                            msg->gps[2]);    
+
+        // Feed location to the waypoint manager.
+        manager.setVehicleLocation(vehicle);
+
+        // Publish the next waypoint to the autopilot.
+        target = manager.getCurrentWaypoint();
+    }
+
+private:
 
         /**
-         * Parse GPS and IMU data to update the vehicle state.
+         * Stores the mission waypoints.
+         */ 
+        WaypointManager manager;
+
+        /**
+         * Stores the current target location.
          */
-        void handleMessage(const lcm::ReceiveBuffer* rbuf,
-                const std::string& chan, 
-                const avionics::naviodata_t* msg)
-        {
-            //parse gps and imu data here...
-            
-        }
+        Waypoint target;
 
-    private:
-
-    	/**
-    	 * Stores the Vehicle State to update.
-    	 */ 
-    	VehicleState toUpdate;
+        /**
+         * Stores the vehicle's current location.
+         */
+        Waypoint vehicle;
 };
 
 

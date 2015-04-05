@@ -1,6 +1,6 @@
-#include "WaypointManager.h"
-
 #include <exception>
+
+#include "WaypointManager.h"
 
 // Exception for use in the WaypointManager class.
 class WaypointManagerException: public std::exception {
@@ -9,8 +9,8 @@ class WaypointManagerException: public std::exception {
 	}
 };
 
-void WaypointManager::setVehicle(VehicleState vehicle) {
-	myVehicle = vehicle;
+void WaypointManager::setVehicleLocation(Waypoint location) {
+	vehicle = location;
 }
 
 void WaypointManager::setWaypoints(std::vector<Waypoint> waypoints) {
@@ -22,8 +22,8 @@ void WaypointManager::setWaypoints(std::vector<Waypoint> waypoints) {
 
 Waypoint WaypointManager::getCurrentWaypoint() {
 
-	// Check if we are within 50 meters of the current waypoint.
-	if (myVehicle.getLocation().getDistance(myWaypoints[current]) < 50) {
+	// Check if we are within the tolerance of the current waypoint.
+	if (vehicle.getDistance(myWaypoints[current]) < tolerance) {
 
 		// Increment to the next waypoint.
 		current = current + 1;

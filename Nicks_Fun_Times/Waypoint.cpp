@@ -1,7 +1,7 @@
-#include "Waypoint.h"
-
 #include <exception>
 #include <cmath>
+
+#include "Waypoint.h"
 
 // Exception for use in the Waypoint class.
 class WaypointException: public std::exception {

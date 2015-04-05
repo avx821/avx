@@ -1,10 +1,9 @@
 #ifndef WAYPOINTMANAGER_H
 #define WAYPOINTMANAGER_H
 
-#include "Waypoint.h"
-#include "VehicleState.h"
-
 #include <vector>
+
+#include "Waypoint.h"
 
 /**
  * This class manages waypoints and checks if the vehicle has hit the current 
@@ -24,11 +23,11 @@ public:
 	~WaypointManager(){}
 
 	/**
-	 * Sets the vehicle to monitor.  
+	 * Sets the vehicle location.  
 	 *
 	 * @param vehicle The vehicle to monitor.
 	 */
-	 void setVehicle(VehicleState vehicle);
+	 void setVehicleLocation(Waypoint location);
 
 	/**
 	 * Used to set the vector of waypoints.  The first waypoint must be the start
@@ -52,6 +51,11 @@ public:
 private:
 
 	/**
+	 * The tolerance for hitting a waypoint in meters.
+	 */
+	final double tolerance = 50;
+
+	/**
 	 * A vector containing the waypoints.
 	 */
 	std::vector<Waypoint> myWaypoints;
@@ -62,9 +66,9 @@ private:
 	int current;
 
 	/**
-	 * The vehicle navigating to the waypoints.
+	 * The locatin of the vehicle navigating to the waypoints.
 	 */
-	VehicleState myVehicle;
+	Waypoint vehicle;
 };
 
 #endif
