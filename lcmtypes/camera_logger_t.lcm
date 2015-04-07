@@ -1,0 +1,9 @@
+package src.camera.camera_log;
+
+struct camera_logger_t
+{
+int64_t timestamp;
+string fileDir; 
+string filename; 
+boolean enabled; 
+}

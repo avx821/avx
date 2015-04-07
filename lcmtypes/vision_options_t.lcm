@@ -1,0 +1,9 @@
+package avionics;
+
+struct vision_options_t
+{
+	int64_t timestamp;
+	boolean trackbar, equalization, morphological, roi,save_video;
+	int16_t power,area;
+	double tau;
+}

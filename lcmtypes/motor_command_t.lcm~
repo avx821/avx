@@ -1,0 +1,8 @@
+package avionics;
+
+struct command_t
+{
+	int64_t timestamp;
+	int8_t L_power;
+	int8_t R_power;
+}

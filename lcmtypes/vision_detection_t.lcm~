@@ -1,0 +1,14 @@
+package avionics;
+
+struct detection_t
+{
+
+	int64_t timestamp; //overall timestamp
+	int64_t frame_timestamp; // when the frame was published
+	boolean detected;
+	double x;
+	double y;
+	double area;
+	int16_t number_of_objects;
+
+}
