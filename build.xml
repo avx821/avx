@@ -1,0 +1,72 @@
+<project name="TakePicture_new" basedir="." default="run">
+
+	<property name="src.dir" value="src/camera"/>
+	<property name="subscriber" value="CameraSubscriber"/>
+	<property name="package_type" value="camera_log"/>
+	<property name="imagecapture" value="TakePicture_new"/>
+	<property name="ocvJarDir" value="../Downloads/opencv/bin"/>
+	<property name="ocvLibDir" value="../Downloads/opencv/lib"/>
+	<property name="classes.dir" value="src/camera/camera_log"/>
+	<property name="lib.dir" value="${ocvJarDir}"/>
+	<property name="ocvjar.dir" value="../Downloads/opencv/bin"/>
+	<property name="jar.dir" value="build/jar"/>
+	<property name="build.dir" value="src/camera/camera_log/classes"/>
+	
+	<path id="class.path">
+		<fileset dir="${src.dir}" includes="lcm.jar,camera_log.jar"/>	
+		<fileset dir="${ocvjar.dir}" includes="*.jar"/>	
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+		
+	<target name="clean" description="Delete all generated files">
+	<delete dir="${build.dir}" failonerror="false"/>
+	<delete dir="${jar.dir}" failonerror="false"/>
+	<delete file="${src.dir}/${package_type}.jar"/>
+	<delete file="${src.dir}/${imagecapture}.class"/>
+	</target>
+	
+<!--	<target name="LCMclass_compile" description="compiles the LCM data file: camera_logger_t">
+	<mkdir dir="${build.dir}"/>
+	<javac  includeantruntime="false" srcdir="${src.dir}/camera_log" destdir="${src.dir}">
+		<classpath path="${src.dir}/lcm.jar"/>
+	</javac>
+	</target> -->
+
+	<target name="jar_camera" description="JARs the camera_log">
+		<jar destfile="${src.dir}/${package_type}.jar" basedir="${src.dir}"/>
+	</target>
+	
+	<target name="compile" description="compiles all .java files">
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${src.dir}">
+			<classpath refid="class.path"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}"/>
+		<delete file="${src.dir}/TakePicture_new.jar"/>
+		<jar destfile="${src.dir}/${imagecapture}.jar">
+			<fileset dir="${src.dir}"
+				excludes ="${subscriber}.class"
+			/>
+			<manifest>
+			<attribute name="Main-Class" value="${imagecapture}"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="run" depends="jar">
+		<mkdir dir="images"/>
+		<java fork="true"  classname="${imagecapture}">
+			<sysproperty key="java.library.path" path="${ocvLibDir}"/>
+			<classpath>
+				<path refid="class.path"/>
+				<path location="${src.dir}/${imagecapture}.jar"/>
+			</classpath>
+		</java>
+	</target>
+	<target name="rebuild-run" depends="clean,jar_camera,run"/>
+
+</project>
+
+	
+		
