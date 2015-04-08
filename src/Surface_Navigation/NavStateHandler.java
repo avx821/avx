@@ -1,14 +1,13 @@
 
 enum NavState{
-	START,INTERRUPTED,ROTATING,STOPPED,ARRIVED
+	READY,START,INTERRUPTED,TRACKING,STOPPED,ARRIVED
 }
 
 public class NavStateHandler {
 	
-	// Add arraylist of motor commands
+	MotorCommand command;
 	NavState state;
-	 final static double LAT_TO_CM=1.106E7; 
-	 final static double LNG_TO_CM=1.113E7; 
+	
 
 	public NavStateHandler(NavState navstate) {
 		this.state=navstate; 
@@ -21,9 +20,19 @@ public class NavStateHandler {
 	public void setState(NavState state) {
 		this.state = state;
 	}
-	
-	public void updateState(){
-		
+	// handles state updates
+	public void updateState(PointGPS target){
+		if(target==null && state==NavState.ARRIVED)
+		{
+			System.out.println("Arrived at destinationi GPS point");
+		}
+		else if (state==NavState.START && target!=null){
+			state=NavState.TRACKING;
+		}
+		else if (state==NavState.TRACKING){
+			// get distance and heading from target
+			// send rotational and translational velocity commands
+		}
 	}
 
 }

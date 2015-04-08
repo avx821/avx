@@ -1,11 +1,16 @@
 import java.io.IOException;
 
 import lcm.lcm.*;
+import camera_log.*;
 
 public class LCMData implements LCMSubscriber, Runnable {
 		 LCM GPSdata_LCM,Heading_LCM;  
 		 GPS_logger_t GPS_msg;
 		 Heading_logger_t Heading_msg;
+		 double latitude; 
+		 double longitude; 
+		 double altitude;
+		 double heading;
 		
 		 
 		public LCMData() throws IOException {
@@ -20,42 +25,42 @@ public class LCMData implements LCMSubscriber, Runnable {
 		}
 		
 		public double getLongitude() {
-			return GPS_msg.GPS[0];
+			return longitude;
 		}
 		public double getLatitude() {
-			return GPS_msg.GPS[1];
+			return latitude;
 		}
 		public double getAltitude() {
-			return GPS_msg.GPS[2];
+			return altitude;
 		}
 		public double getHeading() {
-			return Heading_msg.heading;
+			return heading;
 		}
 
-		public void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
+		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
 		    {
 		        System.out.println("Received message on channel:  " + channel);
 		        try {
 		            if (channel.equals("GPSData")) {  	
 		            	 GPS_msg=new GPS_logger_t(ins);
-		            	 System.out.println("  timestamp    = " + GPS_msg.timestamp);
-			                System.out.println(" [lat,lng,alt]     = [" + GPS_msg.latitude+","+GPS_msg.longitude+","+GPS_msg.altitude+" ]");
-			                System.out.println("  Enabled      = '" + GPS_msg.enabled + "'");
+		            	 System.out.println("  timestamp    = " + GPS_msg.timestamp+ "Got GPS data");
+			             this.latitude=GPS_msg.gps[0]; 
+			             this.longitude=GPS_msg.gps[1]; 
+			             this.altitude=GPS_msg.gps[2];
 		            }   
 		            if (channel.equals("HeadingData")) {
 		            	Heading_msg=new Heading_logger_t(ins);
 		                System.out.println("  timestamp    = " + Heading_msg.timestamp);
-		                System.out.println(" Concatenated Filename     = " + (Heading_msg.fileDir+Heading_msg.filename));
-		                System.out.println("  Enabled      = '" + Heading_msg.enabled + "'");
+		               this.heading=Heading_msg.heading;
 		            }
 		        } catch (IOException ex) {
 		            System.out.println("Exception: " + ex);
 		        }
 		        }
 		
-		protected boolean isConnected(){
-			//get whether comm channel is working
-			return true; 
+		boolean IsConnected(){
+			// checks to see if messages are coming in
+			// if no messages in specified time period, then assume connection lost
 		}
 		@Override
 		public void run() {

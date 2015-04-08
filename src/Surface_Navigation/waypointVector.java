@@ -27,5 +27,13 @@ public class waypointVector {
 	public void setDelta_z(double delta_z) {
 		this.delta_z = delta_z;
 	}	
+	// function that scales a vector by a value of n
+	public waypointVector scaleVector(double n){
+		double x=this.delta_x*n; 
+		double y=this.delta_y*n; 
+		double z=this.delta_z*n; 
+		return new waypointVector(x,y,z);
+	}
+	
 	
 }

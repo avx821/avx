@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-
+enum SegmentType{
+	LINEAR,CUBIC}
 
 public class LinearSpline {
 	double distance; // distance between start and destination waypoints in m
@@ -10,9 +11,10 @@ public class LinearSpline {
 	final static double VISUAL_RADIUS=10;
 	final static double SPLINE_LENGTH=0.1; // 10 cm
 	final static double _tolerance=1E-6; 
+	SegmentType seg;
 	double xt,xt_sq;
-	waypointVector spline_c, spline_b,spline_a;
-	PointGPS start,dest,f0;
+	waypointVector spline_c,f1_prime, spline_b,spline_a,f0,f1, delta_vector,sd;
+	PointGPS start,dest, target;
 	public LinearSpline(PointGPS start, PointGPS dest) {
 		
 		if(start==null || dest==null){
@@ -21,72 +23,105 @@ public class LinearSpline {
 		
 		this.start=start; 
 		this.dest=dest;
-		waypointVector sd=PointGPStoVector(this.start, this.dest);
+	 sd=PointGPStoVector(this.start, this.dest);
 		this.distance=Math.sqrt(sd.getDelta_x()*sd.getDelta_x()+sd.getDelta_y()*sd.getDelta_y());
 		if(distance<=GPS_ACCURACY){
 				throw new IllegalArgumentException("You are already within GPS range...switch to visual servo mode or to next pod");
 			}
 		
 		}
+	double calculateDistance(waypointVector vec){
+		return Math.sqrt(vec.getDelta_x()*vec.getDelta_x()+vec.getDelta_y()*vec.getDelta_y());
+	}
 	
 	double calculateHeight(){
 		return (this.dest.getAlt()-this.start.getAlt()); 
 	}
+	// function that provides Angle wrap capability
+	double wrapAngle(double angle){
+		return angle%(2.0*Math.PI);
+		
+	}
 	// function that creates spline from waypoints and pod heading
-	ArrayList<PointGPS> createSpline(PointGPS w0,PointGPS w1){
+	void createSpline(PointGPS w0,PointGPS w1){
 		// should I return points in spline or velocity to command?
 		// for now, I will return points
-		ArrayList<PointGPS> wp_list=new ArrayList<PointGPS>(); 
-		xt=xt_sq=0.0;
-		f0=this.start;
-		double heading=Math.toRadians(f0.getHeading());
-		spline_c=new waypointVector(0.01*Math.sin(heading),0.01*Math.cos(heading),0);
-		// function initializes the first spline segment
-		initializeSpline(w0,w1); 
-		double num_steps=10.0; 
+		double heading=this.start.getHeading();
+		// get the gradient of the line
+		waypointVector spline=PointGPStoVector(w1,w0);
+		double gradient=spline.delta_y/spline.delta_x;
+		double num_steps=20.0; 
 		// number of steps to create spline
-		 for(int n=0; n<10;n++){
-			 xt=1.0/num_steps *(double)n;
-			 xt_sq=xt*xt;
-			 // function that checks if cubic spline is continuous
-			 wp_list.add(evaluate()); 
-			 
+		 double t=this.calculateDistance(spline)/num_steps;
+		 for(int n=1; n<21;n++){
+			  xt=(double)n*t;
+			 System.out.println("xt:"+xt+", gradient:"+gradient*xt);
+			 double x=this.start.getLat()+xt*gradient/LNG_TO_METERS;
+			 double y=this.start.getLng()+(xt/LAT_TO_METERS);
+			 System.out.println("x-lat:"+x+", y-long:"+y);
+			 PointGPS nextpoint=new PointGPS(x,y,0.0);
+			this.waypoints.add(nextpoint);
 		 }
-		
-		return wp_list; 
 	}
 	
-	void initializeSpline(PointGPS w0,PointGPS w1){
-		waypointVector vec=PointGPStoVector(w0,w1);
-		double[] f1_prime={vec.delta_x/SPLINE_LENGTH,vec.delta_y/SPLINE_LENGTH};
-		calculate spline_a, spline_b
+	waypointVector AddVectors(ArrayList<waypointVector> vectors){
+		waypointVector SumVector=new waypointVector(0,0,0); 
+		for(waypointVector w:vectors)
+		{
+		SumVector.delta_x+=w.delta_x; 
+		SumVector.delta_y+=w.delta_y;
+		SumVector.delta_z+=w.delta_z;
 		}
-	
-	
-	void createWaypoints(){
+	return SumVector; 
+		
+	}
+	void initializeSpline(PointGPS w0,PointGPS w2){
+		waypointVector vec=PointGPStoVector(w0,w2);
+		f1_prime=new waypointVector(vec.delta_x/SPLINE_LENGTH,vec.delta_y/SPLINE_LENGTH,0);
+		ArrayList<waypointVector> vectors=new ArrayList<waypointVector>(); 
+		vectors.add(spline_c); 
+		vectors.add(f0.scaleVector(2.0)); 
+		vectors.add(f1.scaleVector(-2.0)); 
+		vectors.add(f1_prime);
+		spline_a=AddVectors(vectors);
+		vectors.clear();
+		// re-use vector to add other vectors
+		vectors.add(spline_c); 
+		vectors.add(f0.scaleVector(-3.0)); 
+		vectors.add(f1.scaleVector(3.0)); 
+		vectors.add(f1_prime.scaleVector(-1.0));
+		spline_b=AddVectors(vectors);
+		}
+		
+	ArrayList<PointGPS> createWaypoints(){
 		this.waypoints=new ArrayList<PointGPS>();
 		PointGPS w0=this.start;
 		this.waypoints.add(w0);
 		PointGPS w1=null;
+		System.out.println("Start: ["+w0.getLat()+","+w0.getLng()+"]");
 		if(Math.abs(this.distance-100)>=_tolerance){
 			// set the next waypoint 50m away and gun it to that waypoint
+			System.out.println("does this work?");
 			w0.setFlag(true,true,WaypointType.STRAIGHT);
-			w1=calcWaypointfromPoint(50,this.dest); // sets the next waypoint 50m away from dest
+			w1=calcWaypointfromPoint(50,this.dest,this.getBearing(this.sd)); // sets the next waypoint 50m away from dest
+			System.out.println("Destination: ["+w1.getLat()+","+w1.getLng()+"]");
 		}
 		else{
 			w0.setFlag(true,true,WaypointType.STRAIGHT);
-			w1=calcWaypointfromPoint(VISUAL_RADIUS,this.dest);
+			w1=this.dest;
 		}
-		this.waypoints.add(w1);
+		
+		
 		createSpline(w0,w1);
+		return this.waypoints;
 	}
 	double getBearing(waypointVector u){
 		return Math.atan2(u.delta_y,u.delta_x);
 	}
 	
 	PointGPS vectortoPointGPS(waypointVector v, PointGPS from){
-		double delta_phi=v.getDelta_x()/LAT_TO_METERS;
-		double delta_lambda=v.getDelta_y()/LNG_TO_METERS;
+		double delta_phi=v.getDelta_y()/LAT_TO_METERS;
+		double delta_lambda=v.getDelta_x()/LNG_TO_METERS;
 		double to_x=from.getLat()+delta_phi; 
 		double to_y=from.getLng()+delta_lambda; 
 		return new PointGPS(to_x,to_y,from.getAlt());
@@ -97,23 +132,37 @@ public class LinearSpline {
 		double delta_z=to.getAlt()-from.getAlt();
 		return new waypointVector(delta_x,delta_y,delta_z);
 	}
-	PointGPS calcWaypointfromPoint(double dist, PointGPS fp){
-		waypointVector u=PointGPStoVector(this.start,this.dest);
-		double bearing=this.getBearing(u); 
+	PointGPS calcWaypointfromPoint(double dist, PointGPS fp, double bearing){
 		double delta_x=dist*Math.sin(bearing); 
-		double delta_y=dist*Math.cos(bearing); 
-		double delta_phi=delta_x/LAT_TO_METERS; 
-		double delta_lambda=delta_y/LNG_TO_METERS; 
+		double delta_y=dist*Math.cos(bearing); 	
+		double delta_phi=delta_y/LAT_TO_METERS; 
+		double delta_lambda=delta_x/LNG_TO_METERS; 
 		double new_x=fp.getLat()-delta_phi; 
 		double new_y=fp.getLng()-delta_lambda; 
-		
-		return new PointGPS(new_x,new_y,0); 
+		return new PointGPS(new_x,new_y,0.0); 
 		
 	}
-	void evaluate(){
+	void evaluate_spline(){
+		ArrayList<waypointVector> vectors=new ArrayList<waypointVector>(); 
+		if(this.seg==SegmentType.CUBIC){
 		double xt_cubed=xt_sq*xt;
-		 get the next spline target
+		vectors.add(spline_a.scaleVector(xt_cubed)); 
+		vectors.add(spline_b.scaleVector(xt_sq)); 
+		vectors.add(spline_c.scaleVector(xt)); 
+		//vectors.add(this.f0);
+		}
+		else if(this.seg==SegmentType.LINEAR){
+			vectors.add(spline_c.scaleVector(xt)); 
+			///vectors.add(this.f0);
+			}
+		
+		delta_vector=AddVectors(vectors);
+	//System.out.println(delta_vector.getDelta_x()+", "+delta_vector.getDelta_y()+",");
+		this.target=this.vectortoPointGPS(delta_vector, this.target);
+//	System.out.println(target.getLat()+", "+target.getLng()+",");
+	vectors.clear();
 	}
+	
 
 }
 

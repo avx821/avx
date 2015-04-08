@@ -49,6 +49,8 @@ public class PointGPS {
 		this.lat=lat;
 		this.lng=lng; 
 		this.alt=alt;
+		this.flag= new waypointflag();
+		
 	}
 
 	public double getHeading() {
@@ -84,6 +86,7 @@ public class PointGPS {
 	}
 
 	public void setFlag(boolean reached, boolean fast, WaypointType t) {
+		
 		flag.reached_destination=reached; 
 		flag.fast_waypoint=fast; 
 		flag.type=t; 
