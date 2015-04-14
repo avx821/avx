@@ -20,19 +20,11 @@ public TakePicture_new() {
 	 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		lcm=LCM.getSingleton();
 		msg=new camera_logger_t(); 
+		
+		
 		camera=new VideoCapture(0);
-		camera.open(0);
-	/*	try{
-		Thread.sleep(1000);}
-		catch (Exception e)
-		{
-		System.out.println("Sleep Exception");
-		}*/	
-		if(!camera.isOpened()){
-		throw new NullPointerException("Camera is not opened");
-		}
-		time=System.currentTimeMillis();	
-		}
+		
+	}
 
 	public void grabImage(String filename){
 
@@ -50,7 +42,7 @@ public TakePicture_new() {
 		//take picture here
 		for(;;){
 		msg.timestamp = System.nanoTime();
-	        msg.fileDir="/home/pi/avionics/images/";
+	        msg.fileDir="/home/pi/avx/images/";
 	        msg.filename = "testsample_" + String.valueOf(msg.timestamp);
 		msg.enabled=true;	
 	grabImage(msg.fileDir+msg.filename+".jpg");
