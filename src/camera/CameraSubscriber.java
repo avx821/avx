@@ -3,7 +3,7 @@ import java.io.*;
 import lcm.lcm.*;
 import camera_log.*;
 public class CameraSubscriber implements LCMSubscriber {
-	LCM lcm; 
+	 LCM lcm; 
 	public CameraSubscriber() throws IOException {
 		
 		        this.lcm = new LCM();
@@ -22,17 +22,16 @@ public class CameraSubscriber implements LCMSubscriber {
 		            }
 		        } catch (IOException ex) {
 		            System.out.println("Exception: " + ex);
-		        } 
+		        }
 		    }
 		    public static void main(String args[])
 		    {
 		        try {
 		            CameraSubscriber cSub = new CameraSubscriber();
-		        	for(;;)
-			{
-			}
-			} catch (IOException ex){
-			           System.out.println("Exception: " + ex);
+		            while(true) {
+		            }
+		        } catch (IOException ex) {
+		            System.out.println("Exception: " + ex);
+		        } //catch (InterruptedException ex) { }*/
 		    }
 		}
-}

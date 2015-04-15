@@ -4,11 +4,11 @@
 	<property name="subscriber" value="CameraSubscriber"/>
 	<property name="package_type" value="camera_log"/>
 	<property name="imagecapture" value="TakePicture_new"/>
-	<property name="ocvJarDir" value="../Downloads/opencv/bin"/>
-	<property name="ocvLibDir" value="../Downloads/opencv/lib"/>
+	<property name="ocvJarDir" value="../Downloads/opencv/build/bin"/>
+	<property name="ocvLibDir" value="../Downloads/opencv/build/lib"/>
 	<property name="classes.dir" value="src/camera/camera_log"/>
 	<property name="lib.dir" value="${ocvJarDir}"/>
-	<property name="ocvjar.dir" value="../Downloads/opencv/bin"/>
+	<property name="ocvjar.dir" value="../Downloads/opencv/build/bin"/>
 	<property name="jar.dir" value="build/jar"/>
 	<property name="build.dir" value="src/camera/camera_log/classes"/>
 	

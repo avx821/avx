@@ -19,11 +19,8 @@ public class TakePicture_new {
 public TakePicture_new() {
 	 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		lcm=LCM.getSingleton();
-		msg=new camera_logger_t(); 
-		
-		
+		msg=new camera_logger_t(); 	
 		camera=new VideoCapture(0);
-		
 	}
 
 	public void grabImage(String filename){
@@ -44,15 +41,10 @@ public TakePicture_new() {
 		msg.timestamp = System.nanoTime();
 	        msg.fileDir="/home/pi/avx/images/";
 	        msg.filename = "testsample_" + String.valueOf(msg.timestamp);
-		msg.enabled=true;	
+		msg.enabled=true;
 	grabImage(msg.fileDir+msg.filename+".jpg");
 		lcm.publish("CameraData",msg);	
 			}		
-	//	else { 
-	//	System.out.println(System.currentTimeMillis()-time*10e-4);
-//		System.out.println("counter:"+counter);
-//		camera.release(); 
-	//		}
 	}
 	public static void main(String [] args){
 		TakePicture_new t=new TakePicture_new();
