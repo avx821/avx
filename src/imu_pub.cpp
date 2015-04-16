@@ -6,14 +6,14 @@
 
 //Inclusions for lcm
 #include "lcm/lcm-cpp.hpp"
-#include "avionics/navio_imu_t.hpp"
+#include "../types/avionics/navio_imu_t.hpp"
 
 //Inclusions for time
 #include <ctime>
 #include <sys/time.h>
 
 //Inclusions for IMU
-#include "Navio/MPU9250.h"
+#include "/home/pi/Navio/C++/Navio/MPU9250.h"
 
 unsigned long long get_timestamp(){
 	struct timeval tv;

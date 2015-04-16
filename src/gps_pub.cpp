@@ -6,14 +6,14 @@
 
 //Inclusions for lcm
 #include "lcm/lcm-cpp.hpp"
-#include "navio_gps_t.hpp"
+#include "../types/avionics/navio_gps_t.hpp"
 
 //Inclusions for time
 #include <ctime>
 #include <sys/time.h>
 
 //Inclusions for GPS
-#include "Navio/Ublox.h"
+#include "/home/pi/Navio/C++/Navio/Ublox.h"
 
 using namespace std;
 
