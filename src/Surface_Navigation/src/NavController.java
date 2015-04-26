@@ -10,12 +10,19 @@ public class NavController {
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
 	GPS_Navigation gpsnav;
+	realignment gpsrealignment;
 	Motor_command_t motor_msg; // change when lcm message is known
 	
 	public NavController(GPS_Navigation gpsnav) {
 		lcm=LCM.getSingleton();
 		motor_msg=new Motor_command_t();
 		this.gpsnav=gpsnav;
+	}
+	
+	public NavController(realignment gpsrealignment) {
+		lcm=LCM.getSingleton();
+		motor_msg=new Motor_command_t();
+		this.gpsrealignment=gpsrealignment;
 	}
 
 	void publishMotorCommand(){
@@ -25,7 +32,7 @@ public class NavController {
 		lcm.publish("Motor",motor_msg);	
 	}
 	boolean isDone(){
-		return done;
+		return done; //Needs an actual end condition?
 	}
 	void setCommand(int r, int l){
 		this.right=0;
