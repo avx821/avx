@@ -1,5 +1,5 @@
 import lcm.lcm.*;
-
+import avionics.*;
 public class NavController {
 	boolean done=false;
 	int right; 
@@ -10,18 +10,18 @@ public class NavController {
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
 	GPS_Navigation gpsnav;
-	Motor_command_t motor_msg; // change when lcm message is known
-	
+	motor_command_t motor_msg; // change when lcm message is known
+	LCM lcm;
 	public NavController(GPS_Navigation gpsnav) {
 		lcm=LCM.getSingleton();
-		motor_msg=new Motor_command_t();
+		motor_msg=new motor_command_t();
 		this.gpsnav=gpsnav;
 	}
 
 	void publishMotorCommand(){
 		motor_msg.timestamp = System.nanoTime();
-		motor_msg.LM=left; 
-		motor_msg.RM=right;
+		motor_msg.L_power=left; 
+		motor_msg.R_power=right;
 		lcm.publish("Motor",motor_msg);	
 	}
 	boolean isDone(){
