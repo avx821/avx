@@ -12,17 +12,11 @@ public class NavController {
 	GPS_Navigation gpsnav;
 	motor_command_t motor_msg; // change when lcm message is known
 	LCM lcm;
-	realignment gpsrealignment;	
+	
 	public NavController(GPS_Navigation gpsnav) {
 		lcm=LCM.getSingleton();
 		motor_msg=new motor_command_t();
 		this.gpsnav=gpsnav;
-	}
-	
-	public NavController(realignment gpsrealignment) {
-		lcm=LCM.getSingleton();
-		motor_msg=new Motor_command_t();
-		this.gpsrealignment=gpsrealignment;
 	}
 
 	void publishMotorCommand(){
