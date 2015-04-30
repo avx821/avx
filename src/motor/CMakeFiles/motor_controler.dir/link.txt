@@ -1,0 +1,1 @@
+/usr/bin/c++   -O3 -DNDEBUG    CMakeFiles/motor_controler.dir/motor_control.cpp.o  -o motor_controler -rdynamic -L/opt/vc/lib -L/usr/local/lib -llcm -Wl,-rpath,/opt/vc/lib:/usr/local/lib 

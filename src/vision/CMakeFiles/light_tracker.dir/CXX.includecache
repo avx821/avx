@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/avx/src/vision/filter_v2.cpp
+filter_v2.hpp
+/home/pi/avx/src/vision/filter_v2.hpp
+sys/time.h
+-
+ctime
+-
+math.h
+-
+assert.h
+-
+iostream
+-
+
+/home/pi/avx/src/vision/filter_v2.hpp
+math.h
+-
+stdlib.h
+-
+assert.h
+-
+iostream
+-
+ctime
+-
+

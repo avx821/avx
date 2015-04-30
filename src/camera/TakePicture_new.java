@@ -8,30 +8,28 @@ import java.util.logging.Logger;
 import org.opencv.videoio.VideoCapture;
 import java.util.*;
 import lcm.lcm.*;
-import camera_log.*;		
+import camera_log.*;
 public class TakePicture_new {
-	
 	int counter=0;
-	long time; 
 	LCM lcm;
-	VideoCapture camera;	
+	VideoCapture camera;
 	camera_logger_t msg;
 public TakePicture_new() {
 	 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		lcm=LCM.getSingleton();
-		msg=new camera_logger_t(); 	
+		msg=new camera_logger_t();
 		camera=new VideoCapture(0);
 	}
 
 	public void grabImage(String filename){
 
-	Mat frame=new Mat(); 
+	Mat frame=new Mat();
 	if(camera.read(frame))
 	{
 	counter++;
 	Imgcodecs.imwrite(filename,frame);
-	return; 
-	} 
+	return;
+	}
 	else System.out.println("no image");
 	}
 
@@ -42,9 +40,13 @@ public TakePicture_new() {
 	        msg.fileDir="/home/pi/avx/images/";
 	        msg.filename = "testsample_" + String.valueOf(msg.timestamp);
 		msg.enabled=true;
-	grabImage(msg.fileDir+msg.filename+".jpg");
+	grabImage("/home/pi/avx/images/testsample_"+System.nanoTime()+".jpg");
 		lcm.publish("CameraData",msg);	
-			}		
+	/*	try{
+			Thread.sleep(20);
+		}catch(Exception e){
+		}*/	
+		}		
 	}
 	public static void main(String [] args){
 		TakePicture_new t=new TakePicture_new();

@@ -1,0 +1,17 @@
+#ifndef _MOTOR_CONTROL_AVIONICS
+#define _MOTOR_CONTROL_AVIONICS 1
+
+// Herbert declarations
+#include <iostream>
+#include "PCA9685.h"
+#include <lcm/lcm-cpp.hpp>
+#include "I2Cdev.cpp"
+#include "../lcm_headers/cpp/avionics/motor_command_t.hpp"
+
+
+#define NAVIO_RCOUTPUT_1 4
+#define NAVIO_RCOUTPUT_2 5
+int runMotors(double, double);
+
+extern PCA9685 pwm;
+#endif

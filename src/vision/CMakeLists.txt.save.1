@@ -1,0 +1,54 @@
+cmake_minimum_required(VERSION 2.8)
+project( Vision )
+SET(COMPILE_DEFINITIONS -Werror)
+find_Package( OpenCV REQUIRED )
+#find_Package(OpenGL REQUIRED)
+
+FIND_PACKAGE(OpenMP REQUIRED)
+if(OPENMP_FOUND)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt")
+set(CMAKE_C_FLAGS_RELEASE "-O4")
+set(CMAKE_CXX_FLAGS_RELEASE "-O4")
+
+
+set(CMAKE_BUILD_TYPE Release)
+
+SET(LD_PRELOAD $(LD_PRELOAD) "/usr/local/lib/libtcmalloc.a")
+
+include_directories(/usr/include)
+include_directories(/opt/vc/include)
+include_directories(/opt/vc/userland-master/interface/vcos)
+include_directories(/opt/vc/userland-master)
+include_directories(/opt/vc/userland-master/interface/vcos/pthreads)
+include_directories(/opt/vc/userland-master/interface/vmcs_host/linux)
+include_directories(/opt/vc/userland-master/host_applications/linux/libs/bcm_host/include)
+
+include_directories(/usr/local/include)
+include_directories(/usr/local/include/opencv2)
+include_directories(/usr/local/include/opencv)
+include_directories(../gpu_test/)
+include_directories(~/avx/Navio/C++/Navio/)
+include_directories(~/Raspi_Home/16.82Raspi_Code-master/Navio/C++/Navio/)
+include_directories(/usr/include/GL)
+
+include_directories(/opt/vc/userland-master/host_applications/linux/libs/bcm_host/include)
+
+
+link_directories(/opt/vc/lib)
+link_directories(/usr/local/lib/)
+link_directories(/usr/lib/)
+link_directories(/home/pi/avx/src/vision)
+
+SET(VISION_SRC light_tracker.cpp vision_core.cpp motor_control.cpp)
+add_executable (light_tracker ${VISION_SRC} filter_v2.cpp)
+
+target_link_libraries(light_tracker ${OPENCV_LIBS})
+#target_link_libraries(light_tracker libmmal_core.so libmmal_util.so libmmal_vc_client.so libvcos.so libbcm_host.so GLESv2 EGL ncurses ${OpenCV_LIBS})
+#target_link_libraries(light_tracker  libSOIL.so libSOIL.a)
+target_link_libraries(light_tracker liblcm.so)
+#target_link_libraries(light_tracker libtcmalloc.a)

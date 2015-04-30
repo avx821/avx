@@ -1,0 +1,5 @@
+#include "avionics/camera_logger_t.hpp"
+#include "avionics/motor_command_t.hpp"
+#include "avionics/vision_detection_t.hpp"
+#include "avionics/vision_options_t.hpp"
+#include "avionics/waypoint_t.hpp"

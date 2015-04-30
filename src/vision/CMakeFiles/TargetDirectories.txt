@@ -1,0 +1,1 @@
+/home/pi/avx/src/vision/CMakeFiles/light_tracker.dir

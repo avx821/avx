@@ -11,6 +11,7 @@
 //Inclusions for time
 #include <ctime>
 #include <sys/time.h>
+#include <iostream>
 
 //Inclusions for GPS
 #include "/home/pi/Navio/C++/Navio/Ublox.h"
@@ -41,8 +42,10 @@ int main(int argc, char ** argv)
 
 	//This will wait for good gps data. Note that it could fail and return
 	//false
+	cout << "test starting " << endl;
 	if(gps.testConnection())
 	{
+	cout << "test success" << endl;
 		while (true)
 		{
 			//Store time
@@ -53,13 +56,14 @@ int main(int argc, char ** argv)
 			//Store GPS
 			if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data)==1)
 			{
-				data.lon = pos_data[1]; //Longitude
-				data.lat = pos_data[2]; //Latitude
-				data.alt = pos_data[3]; //Altitude
+				data.lon = pos_data[1]/10000000; //Longitude
+				data.lat = pos_data[2]/10000000; //Latitude
+				data.alt = pos_data[3]/10000000; //Altitude
+				cout << pos_data[1] << " " << pos_data[2] << " " << pos_data[3] << endl;
 			}
 			else
 			{
-			    printf("Not Captured");
+			    printf("Not Captured\n");
 			}
 
 		    //Publish it!
