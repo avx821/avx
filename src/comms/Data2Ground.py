@@ -32,11 +32,10 @@ ser = Serial(PORT, BAUD)
 
 def serialHandler(serialData):
     if 'rf_data' in serialData:
-        serialData = str(serialData['rf_data'])
-        #Handler converting Serial to LCM
-        (channelNum, data) = serialData.split('.')
-        channelNum = int(channelNum)
-        #channelNameLCM = PREFIX+SLCMMap[channelNum]
+	    serialData = str(serialData['rf_data'])
+		#Handler converting Serial to LCM
+		(channelNum, data) = serialData.split('.')
+		channelNum = int(channelNum)
 		channelNameLCM = RxLCMMap[channelNum]
         lc.publish(channelNameLCM,data)
 
