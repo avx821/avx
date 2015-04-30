@@ -38,7 +38,7 @@ def lcmHandler(channelNameLCM, data):
     xbee.tx(dest_addr_long='\x00\x13\xA2\x00\x40\xD6\x63\xBB',dest_addr='\xFF\xFE',data='%s.%s' % (str(channelNum), data) )
     print "LCM! on Pod"
 
-subscriptions = [lc.subscribe(name,lcmHandler) for name in SLCMMap]
+subscriptions = [lc.subscribe(name,lcmHandler) for name in TxSLCMMap]
 
 print 'setup complete'
 

@@ -12,9 +12,9 @@ channelDB = dict()
 #On Cygwin, uncomment
 #PORT = '/dev/ttyS2'
 #On Windows, uncomment
-Port = 'COM3'
+#Port = 'COM3'
 #On Unix/Linux, uncomment
-#PORT = '/dev/ttyUSB0'
+PORT = '/dev/ttyUSB0'
 BAUD = 9600
 ser = Serial(PORT, BAUD)
 
@@ -36,7 +36,7 @@ def lcmHandler(channelNameLCM, data):
     xbee.tx(dest_addr_long='\x00\x13\xA2\x00\x40\xD6\x63\xBB',dest_addr='\xFF\xFE',data='%s.%s' % (str(channelNum), data) )
     print "LCM!"
 
-subscriptions = [lc.subscribe(name,lcmHandler) for name in SLCMMap]
+subscriptions = [lc.subscribe(name,lcmHandler) for name in TxSLCMMap]
 
 print 'setup complete'
 
@@ -44,11 +44,10 @@ try:
     while True:
         #handle LCM
         lc.handle()
-except KeyboardInterrupt:
+except:
     print "Module Exits from Keyboard Interrupt"
 finally:
     ser.close()
-    #[lc.unsubscribe(x) for x in subscriptions]
+    [lc.unsubscribe(x) for x in subscriptions]
 
-#[lc.unsubscribe(x) for x in subscriptions]
 print 'module end successfully'

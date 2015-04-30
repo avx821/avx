@@ -47,7 +47,7 @@ def lcmHandler(channelNameLCM, data):
     xbee.tx(dest_addr_long='\x00\x13\xA2\x00\x40\xD8\x3A\x49',dest_addr='\xFF\xFE',data='%s.%s' % (str(channelNum), data) )
     print "LCM!"
 
-subscriptions = [lc.subscribe(name,lcmHandler) for name in SLCMMap]
+subscriptions = [lc.subscribe(name,lcmHandler) for name in TxSLCMMap]
 
 print 'setup complete'
 
@@ -59,7 +59,7 @@ except:
     print "Module Exits from Keyboard Interrupt"
 finally:
     ser.close()
-    #[lc.unsubscribe(x) for x in subscriptions]
+    [lc.unsubscribe(x) for x in subscriptions]
 
 #[lc.unsubscribe(x) for x in subscriptions]
 print 'module end successfully'
