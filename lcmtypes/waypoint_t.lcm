@@ -1,0 +1,5 @@
+package avionics;
+
+struct waypoint_t {
+	double gps[3];
+}
