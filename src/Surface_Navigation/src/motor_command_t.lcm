@@ -1,0 +1,8 @@
+package avionics;
+
+struct motor_command_t
+{
+	int64_t timestamp;
+	int32_t L_power;
+	int32_t R_power;
+}
