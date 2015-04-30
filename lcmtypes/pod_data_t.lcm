@@ -6,6 +6,5 @@ struct pod_data_t
     double   gps[2];		//Decimal degrees lat, lon	
     double   pod_heading;   //magnetic heading(degrees (0,360]))	
     double   wind_data[2];	//wind magnitude (knots), true direction (degrees (0,360]))	
-    string   name;
     boolean  pod_wave_off;   //1=Normal, 0 = Error
 }
