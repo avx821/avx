@@ -3,6 +3,6 @@ package avionics;
 struct motor_command_t
 {
 	int64_t timestamp;
-	int8_t L_power;
-	int8_t R_power;
+	int32_t L_power;
+	int32_t R_power;
 }
