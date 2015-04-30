@@ -42,7 +42,7 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 
 		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
 		    {
-		      System.out.println("Received message on channel:  " + channel); 
+		    //  System.out.println("Received message on channel:  " + channel); 
 		      this.connected=true;
 		        try {
 		            if (channel.contains("gps")) {
@@ -90,7 +90,11 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 	System.out.println("waiting for comm. startup");
 	synchronized(gpsnav){
 		while(!connected){
+			try{
 			gpsnav.wait();
+			}catch(InterruptedException ex){
+			System.out.println("Monitor exxception");
+			}
 		}
 		System.out.println("Stop waiting");
 	}

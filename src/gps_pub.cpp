@@ -59,11 +59,11 @@ int main(int argc, char ** argv)
 				data.lon = pos_data[1]/10000000; //Longitude
 				data.lat = pos_data[2]/10000000; //Latitude
 				data.alt = pos_data[3]/10000000; //Altitude
-				cout << pos_data[1] << " " << pos_data[2] << " " << pos_data[3] << endl;
+		//		cout << pos_data[1] << " " << pos_data[2] << " " << pos_data[3] << endl;
 			}
 			else
 			{
-			    printf("Not Captured\n");
+		//	    printf("Not Captured\n");
 			}
 
 		    //Publish it!
