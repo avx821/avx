@@ -27,25 +27,12 @@ public class GPS_Navigation implements Runnable {
 		double delta_z=to.getAlt()-from.getAlt();
 		return new waypointVector(delta_x,delta_y,delta_z);
 	}
-	public GPS_Navigation(PointGPS goal){
-			LCMData sComm;
-			try {
-				sComm = new LCMData();
-				sComm.run();
-				synchronized(sComm){
-				while(!sComm.isConnected()){
-				System.out.println("Waiting of comm data");	
-				wait();
-				}
-			    }
+	public GPS_Navigation(LCMData sComm,PointGPS goal){
+			this.sysComm=sComm;
 		this.start=new PointGPS(sComm.getLatitude(), sComm.getLongitude(),0.0);
 		start.setHeading(Math.toRadians(sComm.getHeading()));
 		start.setHeading(Math.toRadians(sComm.getHeading()));
-		System.out.println("Running, got system data");
-	}catch(Exception ex){
-				System.out.println("Comm start error");
-			}
-			
+	//	System.out.println("Running, got system data");
 		this.dest=goal;
 		this.controller=new NavController(this);
 	}
@@ -95,14 +82,13 @@ public class GPS_Navigation implements Runnable {
 	public void run() {
 		this.current=this.start;
 		synchronized(sysComm){
-
 		if(sysComm!=null) //|| sysComm.isConnected())
 		{
 			System.out.println("sysComm is working");
 			// update these to format in LCM data types
 			this.current=new PointGPS(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude()); 
 			this.current.setHeading(sysComm.getHeading());
-			System.out.println("Got GPS and heading data");
+			//System.out.println("Got GPS and heading data");
 		}
 		else{
 			// get old value of current location from memory
@@ -126,7 +112,7 @@ public class GPS_Navigation implements Runnable {
 			double delta_heading=this.heading-dest.heading;
 			delta_heading=wrapAngle(delta_heading);
 			controller.updateState(distance,delta_heading);
-			System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
+			//System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
 		}
 		/*
  **
@@ -143,7 +129,7 @@ public class GPS_Navigation implements Runnable {
 	// function that provides Angle wrap capability
 		
 	 public static void main(String[] args){
-		
+		 	try {
 				// parse argument inputs for goal GPS point
 				double Glat=Double.parseDouble(args[0]); 
 				double Glng=Double.parseDouble(args[1]); 
@@ -151,18 +137,21 @@ public class GPS_Navigation implements Runnable {
 				PointGPS goal=new PointGPS(Glat,Glng,0.0);
 				// set heading for goal and start GPS points
 				goal.setHeading(Math.toRadians(Double.parseDouble(args[2])));
+				LCMData sComm= new LCMData();		
+				Thread sysThread=new Thread(sComm);
 				// set limits for heading here or in set method
-				 GPS_Navigation WaypointNav=new GPS_Navigation(goal);
-				 WaypointNav.run();
+				 GPS_Navigation WaypointNav=new GPS_Navigation(sComm,goal);
+				 Thread navThread=new Thread(WaypointNav);
+				 sComm.setNav(WaypointNav);
+				 sysThread.start();
+				 navThread.start();
 			/*Uncomment when pod comm ability is enabled
 			 * LCM_PodData pComm=new LCM_PodData(); 
 			pComm.run();*/
-			
-			
-		//} catch (IOException e) {
+		 	} catch (IOException e) {
 			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
+		e.printStackTrace();
+		}
 		
 	 }
 }

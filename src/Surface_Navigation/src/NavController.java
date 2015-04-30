@@ -5,25 +5,23 @@ public class NavController {
 	int right; 
 	int left;
 	final double _tolerance=1E-6; 
-	final double MAX_VELOCITY=75; 
-	final double MIN_VELOCITY=30;
+	final double MAX_VELOCITY=20; 
+	final double MIN_VELOCITY=2;
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
-	GPS_Navigation gpsnav;
 	motor_command_t motor_msg; // change when lcm message is known
 	LCM lcm;
 	
 	public NavController(GPS_Navigation gpsnav) {
 		lcm=LCM.getSingleton();
 		motor_msg=new motor_command_t();
-		this.gpsnav=gpsnav;
 	}
 
 	void publishMotorCommand(){
 		motor_msg.timestamp = System.nanoTime();
 		motor_msg.L_power=left; 
 		motor_msg.R_power=right;
-		lcm.publish("Motor",motor_msg);	
+		lcm.publish("MOTOR",motor_msg);	
 	}
 	boolean isDone(){
 		return done; //Needs an actual end condition?

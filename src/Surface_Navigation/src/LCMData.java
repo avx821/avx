@@ -11,6 +11,7 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		 double altitude;
 		 double heading;
 		 boolean connected;
+		 GPS_Navigation gpsnav;
 		public LCMData() throws IOException {
 			this.GPSdata_LCM = new LCM();
 			this.Heading_LCM = new LCM();
@@ -22,7 +23,9 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 	       *  // initialize heading and GPS message from last mode
 	       */
 		}
-		
+		public void setNav(GPS_Navigation nav){
+			this.gpsnav=nav;
+		}
 		public double getLongitude() {
 			return longitude;
 		}
@@ -40,6 +43,7 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
 		    {
 		      System.out.println("Received message on channel:  " + channel); 
+		      this.connected=true;
 		        try {
 		            if (channel.contains("gps")) {
 		            	 GPS_msg=new navio_gps_t(ins);
@@ -62,10 +66,7 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		}
 	}
 		boolean isConnected(){
-			if((GPS_msg!=null) &&(Heading_msg!=null)){
-			return true;
-			}
-			else return false;
+			return connected;
 		}
 		@Override
 		public double calculateHeading() {
@@ -86,7 +87,13 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		@Override
 	public void run() {
 	//public static void main(String[] args){
-	System.out.println("Wait status=0, running status=1");
+	System.out.println("waiting for comm. startup");
+	synchronized(gpsnav){
+		while(!connected){
+			gpsnav.wait();
+		}
+		System.out.println("Stop waiting");
+	}
 			 for(;;)
 			 {
 				 // check if receiving data from pi
