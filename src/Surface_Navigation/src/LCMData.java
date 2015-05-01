@@ -56,9 +56,10 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		            	Heading_msg=new navio_imu_t(ins);
 		          //      System.out.println("  timestamp    = " + Heading_msg.timestamp);
 		               this.heading=calculateHeading();
-		         //       System.out.println(" heading    = " + this.heading);
-		            }
-		        } catch (IOException ex) {
+			//	System.out.println(" heading    = " + this.heading);
+				Thread.sleep(50);
+		        	}
+			}catch (Exception ex) {
 		            System.out.println("Exception: " + ex);
 		        }
 			synchronized(this){
@@ -71,17 +72,19 @@ public class LCMData implements LCMSubscriber,HeadingCalibration, Runnable {
 		@Override
 		public double calculateHeading() {
 			long[] imu_pos=Heading_msg.imu_pos; 
-			long[] imu_vel=Heading_msg.imu_vel; 
-			long[] imu_acc=Heading_msg.imu_acc;
-			double mag_norm=(double) Math.sqrt((imu_pos[0]*imu_pos[0])+(imu_pos[1]*imu_pos[1]+(imu_pos[2]*imu_pos[2])));
+			//long[] imu_vel=Heading_msg.imu_vel; 
+			//long[] imu_acc=Heading_msg.imu_acc;
+			double mag_norm=(double) Math.sqrt((imu_pos[0]*imu_pos[0])+(imu_pos[1]*imu_pos[1])+(imu_pos[2]*imu_pos[2]));
 			double magx=(double) (imu_pos[0]/mag_norm);
 			double magy=(double) (imu_pos[1]/mag_norm);
-			double magz=(double) (imu_pos[2]/mag_norm);
-			double Pitch=Math.atan2(imu_acc[1],(Math.sqrt(imu_acc[0]*imu_acc[0] + imu_acc[2]*imu_acc[2])));
-			double Roll=Math.atan2(-imu_acc[0],imu_acc[2]);
-			double delta_my= -magy*Math.cos(Roll)+magz*Math.sin(Roll); 
-			double delta_mx=magx*Math.cos(Pitch)+magy*Math.sin(Pitch)*Math.sin(Roll)+magz*Math.sin(Pitch)*Math.cos(Roll);
-			double magheading=Math.atan2(delta_my,delta_mx);
+			//double magz=(double) (imu_pos[2]/mag_norm);
+			//double Pitch=Math.atan2(imu_acc[1],imu_acc[2]);
+			//double Roll=Math.atan2(imu_acc[0],imu_acc[2]);
+			//double delta_my= magy*Math.cos(Roll)+magz*Math.sin(Roll);
+			//double delta_mx=magx*Math.cos(Pitch)+magy*Math.sin(Pitch)*Math.sin(Roll)-magz*Math.sin(Pitch)*Math.cos(Roll);
+			double magheading=Math.atan2(magy,magx);
+			System.out.println("[magx,magy]:["+magx+", "+magy+"]");
+			magheading=magheading*180/Math.PI;
 			return magheading;
 		}
 		@Override

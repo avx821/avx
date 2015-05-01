@@ -19,7 +19,7 @@ import lcm.lcm.*; import avionics.*; public class NavController {
 		motor_msg.timestamp = System.nanoTime();
 		motor_msg.L_power=left; 
 		motor_msg.R_power=right;
-		System.out.println("Publishing motor commands [L,R]: ["+motor_msg.L_power+", "+motor_msg.R_power+"]");
+		//System.out.println("Publishing motor commands [L,R]: ["+motor_msg.L_power+", "+motor_msg.R_power+"]");
 		lcm.publish("MOTOR",motor_msg);	
 	}
 	boolean isDone(){
