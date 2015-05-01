@@ -4,8 +4,8 @@ from serial import Serial
 from xbee import ZigBee
 
 #Serial to LCM Mapping
-TxLCMMap = ["05EBOLA","pod_data","plane_override"]  #LCM Messages to receive
-RxLCMMap = ["05EBOLA"] 	#LCM Messages to Transmit
+TxLCMMap = ["05EBOLA","imu","gps"]  #LCM Messages to receive
+RxLCMMap = ["05EBOLA","OVERRIDE","pod_data"] 	#LCM Messages to Transmit
 #Setup Handler for LCM
 lc = lcm.LCM()
 channelDB = dict()
