@@ -2,7 +2,7 @@
 
 #javac -cp lcm.jar:. avionics/*.java
 #jar cvf avionics.jar avionics/*.class
-javac -cp lcm.jar:avionics.jar:. *.java
+javac -cp lcm.jar:avionics.jar:. *.java &&
 echo "starting imu publishing"
 ./../../imu_pub &
 #echo "running GPS Nav code"

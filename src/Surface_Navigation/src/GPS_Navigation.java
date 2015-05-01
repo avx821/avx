@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 
 public class GPS_Navigation implements Runnable {
@@ -137,14 +138,17 @@ public class GPS_Navigation implements Runnable {
 				PointGPS goal=new PointGPS(Glat,Glng,0.0);
 				// set heading for goal and start GPS points
 				goal.setHeading(Math.toRadians(Double.parseDouble(args[2])));
-				LCMData sComm= new LCMData();		
-				Thread sysThread=new Thread(sComm);
+				MovingFilter filter=new MovingFilter();
+				LCMData sComm= new LCMData(filter);		
 				// set limits for heading here or in set method
-				 GPS_Navigation WaypointNav=new GPS_Navigation(sComm,goal);
+				Thread sysThread=new Thread(sComm);
+				//HeadingCalibration cal=new HeadingCalibration(filter,sysComm);
+				GPS_Navigation WaypointNav=new GPS_Navigation(sComm,goal);
 				 Thread navThread=new Thread(WaypointNav);
 				 sComm.setNav(WaypointNav);
 				 sysThread.start();
-				 navThread.start();
+			//	cal.startCalibrate();
+				navThread.start();
 			/*Uncomment when pod comm ability is enabled
 			 * LCM_PodData pComm=new LCM_PodData(); 
 			pComm.run();*/
