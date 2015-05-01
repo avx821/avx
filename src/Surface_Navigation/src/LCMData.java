@@ -1,6 +1,4 @@
-import java.io.IOException;
-import avionics.*;
-import lcm.lcm.*;
+import java.io.IOException; import avionics.*; import lcm.lcm.*;
 
 public class LCMData implements LCMSubscriber,Runnable {
 		 LCM GPSdata_LCM,Heading_LCM;  
@@ -11,9 +9,9 @@ public class LCMData implements LCMSubscriber,Runnable {
 		 double altitude;
 		 double heading=Double.NaN;
 		 boolean connected=false;
-		 MovingAverage filter;
+		 MovingFilter filter;
 		 GPS_Navigation gpsnav;
-		public LCMData(MovingAverage mf) throws IOException {
+		public LCMData(MovingFilter mf) throws IOException {
 			this.GPSdata_LCM = new LCM();
 			this.Heading_LCM = new LCM();
 	        this.GPSdata_LCM.subscribe("gps", this);
@@ -83,17 +81,17 @@ public class LCMData implements LCMSubscriber,Runnable {
 			//long[] imu_vel=Heading_msg.imu_vel; 
 			//long[] imu_acc=Heading_msg.imu_acc;
 			//double mag_norm=(double) Math.sqrt((imu_pos[0]*imu_pos[0])+(imu_pos[1]*imu_pos[1])+(imu_pos[2]*imu_pos[2]));
-			double magx=(double) (imu_pos[0]/7.0)-0.05;
-			double magy=(double) (imu_pos[1]/7.0)-1.7;
+			double magx=(double) (imu_pos[0]/7.8)-0.05;
+			double magy=(double) (imu_pos[1]/7.5)-0.9;
 			//double magz=(double) (imu_pos[2]/mag_norm);
 			//double Pitch=Math.atan2(imu_acc[1],imu_acc[2]);
 			//double Roll=Math.atan2(imu_acc[0],imu_acc[2]);
 			//double delta_my= magy*Math.cos(Roll)+magz*Math.sin(Roll);
 			//double delta_mx=magx*Math.cos(Pitch)+magy*Math.sin(Pitch)*Math.sin(Roll)-magz*Math.sin(Pitch)*Math.cos(Roll);
-			double magheading=Math.atan2(magy,magx);
+			double magheading=Math.atan2(-magy,magx);
 			//System.out.println("[magx,magy]:["+magx+", "+magy+"]");
 			magheading=magheading*180/Math.PI;
-			magheading=this.filter.getAverage(magHeading);
+			magheading=this.filter.getAverage(magheading);
 			return magheading;
 		}
 		@Override

@@ -17,10 +17,15 @@ public class GPS_Navigation implements Runnable {
 	 double omega=0.0; 
 	 double speed=0.0;
 	 boolean Arrived=false;
-	public GPS_Navigation(LCMData sComm){
+	public GPS_Navigation(PointGPS start, PointGPS goal){
 	//	this.podComm=pComm;
-		this.sysComm=sComm;
-		// initialize aircraft start points and radius
+		this.start=start;
+		this.start.setHeading(0.0);
+		this.dest=this.calcWaypointfromPoint(RADIUS,goal,goal.heading);
+		System.out.println("New Destination: ["+dest.lat+", "+dest.lng+"]");
+		this.heading=calcHaversineHeading(this.start,dest);
+		this.heading=180*wrapAngle(heading)/Math.PI;
+		System.out.println("Delta heading command: "+this.heading);
 	}
 	waypointVector PointGPStoVector(PointGPS from, PointGPS to){
 		double delta_x=(to.getLat()-from.getLat())*LAT_TO_METERS; 
@@ -32,8 +37,6 @@ public class GPS_Navigation implements Runnable {
 			this.sysComm=sComm;
 		this.start=new PointGPS(sComm.getLatitude(), sComm.getLongitude(),0.0);
 		start.setHeading(Math.toRadians(sComm.getHeading()));
-		start.setHeading(Math.toRadians(sComm.getHeading()));
-	//	System.out.println("Running, got system data");
 		this.dest=goal;
 		this.controller=new NavController(this);
 	}
@@ -131,6 +134,7 @@ public class GPS_Navigation implements Runnable {
 		
 	 public static void main(String[] args){
 		 	try {
+				if(args.length<4){
 				// parse argument inputs for goal GPS point
 				double Glat=Double.parseDouble(args[0]); 
 				double Glng=Double.parseDouble(args[1]); 
@@ -147,8 +151,23 @@ public class GPS_Navigation implements Runnable {
 				 Thread navThread=new Thread(WaypointNav);
 				 sComm.setNav(WaypointNav);
 				 sysThread.start();
-			//	cal.startCalibrate();
 				navThread.start();
+			}
+			else {
+				double Glat=Double.parseDouble(args[0]); 
+				double Glng=Double.parseDouble(args[1]); 
+				// initialize start and dest GPS points
+				PointGPS goal=new PointGPS(Glat,Glng,0.0);
+				// set heading for goal and start GPS points
+				goal.setHeading(Math.toRadians(Double.parseDouble(args[2])));
+				double Slat=Double.parseDouble(args[3]); 
+				double Slng=Double.parseDouble(args[4]); 
+				// initialize start and dest GPS points
+				PointGPS start=new PointGPS(Slat,Slng,0.0);
+				// set heading for goal and start GPS points
+				GPS_Navigation WaypointNav=new GPS_Navigation(start,goal);
+				//navThread.run();
+			}
 			/*Uncomment when pod comm ability is enabled
 			 * LCM_PodData pComm=new LCM_PodData(); 
 			pComm.run();*/
