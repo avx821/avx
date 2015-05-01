@@ -52,7 +52,7 @@ link_directories(/usr/lib/)
 link_directories(/home/pi/avx/src/vision)
 
 SET(VISION_SRC light_tracker.cpp vision_core.cpp motor_control.cpp)
-add_executable (light_tracker ${VISION_SRC} filter_v2.cpp)
+add_executable (light_tracker ${VISION_SRC} filter_v1.cpp)
 
 
 target_link_libraries(light_tracker pthread)

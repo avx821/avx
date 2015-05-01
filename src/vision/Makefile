@@ -114,29 +114,29 @@ light_tracker/fast:
 	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/build
 .PHONY : light_tracker/fast
 
-filter_v2.o: filter_v2.cpp.o
-.PHONY : filter_v2.o
+filter_v1.o: filter_v1.cpp.o
+.PHONY : filter_v1.o
 
 # target to build an object file
-filter_v2.cpp.o:
-	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v2.cpp.o
-.PHONY : filter_v2.cpp.o
+filter_v1.cpp.o:
+	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v1.cpp.o
+.PHONY : filter_v1.cpp.o
 
-filter_v2.i: filter_v2.cpp.i
-.PHONY : filter_v2.i
+filter_v1.i: filter_v1.cpp.i
+.PHONY : filter_v1.i
 
 # target to preprocess a source file
-filter_v2.cpp.i:
-	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v2.cpp.i
-.PHONY : filter_v2.cpp.i
+filter_v1.cpp.i:
+	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v1.cpp.i
+.PHONY : filter_v1.cpp.i
 
-filter_v2.s: filter_v2.cpp.s
-.PHONY : filter_v2.s
+filter_v1.s: filter_v1.cpp.s
+.PHONY : filter_v1.s
 
 # target to generate assembly for a file
-filter_v2.cpp.s:
-	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v2.cpp.s
-.PHONY : filter_v2.cpp.s
+filter_v1.cpp.s:
+	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v1.cpp.s
+.PHONY : filter_v1.cpp.s
 
 light_tracker.o: light_tracker.cpp.o
 .PHONY : light_tracker.o
@@ -219,9 +219,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... light_tracker"
 	@echo "... rebuild_cache"
-	@echo "... filter_v2.o"
-	@echo "... filter_v2.i"
-	@echo "... filter_v2.s"
+	@echo "... filter_v1.o"
+	@echo "... filter_v1.i"
+	@echo "... filter_v1.s"
 	@echo "... light_tracker.o"
 	@echo "... light_tracker.i"
 	@echo "... light_tracker.s"

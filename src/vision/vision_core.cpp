@@ -258,6 +258,25 @@ HSV_filter::HSV_filter()
         H_high=125;
         S_high=248;
         V_high=255;
+
+//yelow dock hopefully
+        H_low=88;
+        S_low=107;
+        V_low=176;
+
+        H_high=102;
+        S_high=255;
+        V_high=255;
+
+//red beacon
+
+        H_low=119;
+        S_low=136;
+        V_low=176;
+
+        H_high=137;
+        S_high=255;
+        V_high=255;
 	
 }
 

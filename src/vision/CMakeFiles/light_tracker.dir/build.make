@@ -121,35 +121,35 @@ CMakeFiles/light_tracker.dir/motor_control.cpp.o.provides: CMakeFiles/light_trac
 
 CMakeFiles/light_tracker.dir/motor_control.cpp.o.provides.build: CMakeFiles/light_tracker.dir/motor_control.cpp.o
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.o: CMakeFiles/light_tracker.dir/flags.make
-CMakeFiles/light_tracker.dir/filter_v2.cpp.o: filter_v2.cpp
+CMakeFiles/light_tracker.dir/filter_v1.cpp.o: CMakeFiles/light_tracker.dir/flags.make
+CMakeFiles/light_tracker.dir/filter_v1.cpp.o: filter_v1.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/avx/src/vision/CMakeFiles $(CMAKE_PROGRESS_4)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/light_tracker.dir/filter_v2.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/light_tracker.dir/filter_v2.cpp.o -c /home/pi/avx/src/vision/filter_v2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/light_tracker.dir/filter_v1.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/light_tracker.dir/filter_v1.cpp.o -c /home/pi/avx/src/vision/filter_v1.cpp
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/light_tracker.dir/filter_v2.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/pi/avx/src/vision/filter_v2.cpp > CMakeFiles/light_tracker.dir/filter_v2.cpp.i
+CMakeFiles/light_tracker.dir/filter_v1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/light_tracker.dir/filter_v1.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/pi/avx/src/vision/filter_v1.cpp > CMakeFiles/light_tracker.dir/filter_v1.cpp.i
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/light_tracker.dir/filter_v2.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/pi/avx/src/vision/filter_v2.cpp -o CMakeFiles/light_tracker.dir/filter_v2.cpp.s
+CMakeFiles/light_tracker.dir/filter_v1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/light_tracker.dir/filter_v1.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/pi/avx/src/vision/filter_v1.cpp -o CMakeFiles/light_tracker.dir/filter_v1.cpp.s
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.o.requires:
-.PHONY : CMakeFiles/light_tracker.dir/filter_v2.cpp.o.requires
+CMakeFiles/light_tracker.dir/filter_v1.cpp.o.requires:
+.PHONY : CMakeFiles/light_tracker.dir/filter_v1.cpp.o.requires
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.o.provides: CMakeFiles/light_tracker.dir/filter_v2.cpp.o.requires
-	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v2.cpp.o.provides.build
-.PHONY : CMakeFiles/light_tracker.dir/filter_v2.cpp.o.provides
+CMakeFiles/light_tracker.dir/filter_v1.cpp.o.provides: CMakeFiles/light_tracker.dir/filter_v1.cpp.o.requires
+	$(MAKE) -f CMakeFiles/light_tracker.dir/build.make CMakeFiles/light_tracker.dir/filter_v1.cpp.o.provides.build
+.PHONY : CMakeFiles/light_tracker.dir/filter_v1.cpp.o.provides
 
-CMakeFiles/light_tracker.dir/filter_v2.cpp.o.provides.build: CMakeFiles/light_tracker.dir/filter_v2.cpp.o
+CMakeFiles/light_tracker.dir/filter_v1.cpp.o.provides.build: CMakeFiles/light_tracker.dir/filter_v1.cpp.o
 
 # Object files for target light_tracker
 light_tracker_OBJECTS = \
 "CMakeFiles/light_tracker.dir/light_tracker.cpp.o" \
 "CMakeFiles/light_tracker.dir/vision_core.cpp.o" \
 "CMakeFiles/light_tracker.dir/motor_control.cpp.o" \
-"CMakeFiles/light_tracker.dir/filter_v2.cpp.o"
+"CMakeFiles/light_tracker.dir/filter_v1.cpp.o"
 
 # External object files for target light_tracker
 light_tracker_EXTERNAL_OBJECTS =
@@ -157,7 +157,7 @@ light_tracker_EXTERNAL_OBJECTS =
 light_tracker: CMakeFiles/light_tracker.dir/light_tracker.cpp.o
 light_tracker: CMakeFiles/light_tracker.dir/vision_core.cpp.o
 light_tracker: CMakeFiles/light_tracker.dir/motor_control.cpp.o
-light_tracker: CMakeFiles/light_tracker.dir/filter_v2.cpp.o
+light_tracker: CMakeFiles/light_tracker.dir/filter_v1.cpp.o
 light_tracker: CMakeFiles/light_tracker.dir/build.make
 light_tracker: /usr/local/lib/libopencv_videostab.so.3.0.0
 light_tracker: /usr/local/lib/libopencv_videoio.so.3.0.0
@@ -204,7 +204,7 @@ CMakeFiles/light_tracker.dir/build: light_tracker
 CMakeFiles/light_tracker.dir/requires: CMakeFiles/light_tracker.dir/light_tracker.cpp.o.requires
 CMakeFiles/light_tracker.dir/requires: CMakeFiles/light_tracker.dir/vision_core.cpp.o.requires
 CMakeFiles/light_tracker.dir/requires: CMakeFiles/light_tracker.dir/motor_control.cpp.o.requires
-CMakeFiles/light_tracker.dir/requires: CMakeFiles/light_tracker.dir/filter_v2.cpp.o.requires
+CMakeFiles/light_tracker.dir/requires: CMakeFiles/light_tracker.dir/filter_v1.cpp.o.requires
 .PHONY : CMakeFiles/light_tracker.dir/requires
 
 CMakeFiles/light_tracker.dir/clean:

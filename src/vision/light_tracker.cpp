@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "filter_v2.hpp"
+//#include "filter_v2.hpp"
 
 double X_VALUE;
 double Y_VALUE;
@@ -20,14 +20,14 @@ unsigned long long TIME;
 
 #define RUN_MOTORS 1
 #define OMP_WAIT_POLICY PASSIVE
-#define OWN_CV 1
+#define OWN_CV 0
 //TODO set the environment variable
 // global variables
 double WIDTH = 1920;	// frame width
 double HEIGHT = 1080; // frame height
 double L_power =0;
 double R_power =0;
-//double TAU=1;
+double TAU=1;
 double TARGET_AREA = 0;
 
 //#include <gperftools/tcmalloc.h>
@@ -36,7 +36,7 @@ double TARGET_AREA = 0;
 #include "opencv2/opencv.hpp"
 #include "vision_core.hpp"
 #include "motor_control.hpp"
-#include "filter_v2.hpp"
+#include "filter_v1.hpp"
 #include <ctime>
 #include <string>
 #include <fstream>
@@ -63,7 +63,7 @@ options_c::options_c()
     area=25;
     tau=1;
 }
-unsigned long long timeout_gvc=3000;
+unsigned long long timeout_gvc=2000;
 
 int main(int, char**)
 {
@@ -135,11 +135,13 @@ if(-1==fd){
         {
 
                 inputVideo >> img; // get a new frame from camera		
-		/*
+		
+/*
 		frame=img.clone();
 		imshow("frame",frame);
 		waitKey(3);
-		*/
+*/
+		
 		
 		
 		img_grey=Mat::zeros(img.rows,img.cols,CV_8UC1);
@@ -158,12 +160,12 @@ if(-1==fd){
 		}
 
                 if(options.equalization) equalize(frame,img);
-#if OWN_CV
+#if !OWN_CV
 		//frame=img.clone();
 		Mat img_grey=threshold_HSV(img,filter);
 #endif
 
-#if !OWN_CV
+#if OWN_CV
 		if(options.trackbar){
 			filter.thresholding_dynamic(img,img_grey);
 		}
@@ -255,15 +257,15 @@ if(-1==fd){
 		TIME=detection.timestamp;
                 //TAU=options.tau;
 		TARGET_AREA = (double)radius;
-                //thrust_x(x_value, (frame_time-start_time)/1000);
+                thrust_x(x_value, (frame_time-start_time)/1000);
                 //cout<<"suplied x_value   "<< x_value<< "timechange"<<(frame_time-start_time)/1000<<endl;
 		//cout<<largest_area<<endl;
 #if RUN_MOTORS
-  		run_filter(x_value,(unsigned long long)detection.timestamp);
-
+  		//run_filter(x_value,(unsigned long long)detection.timestamp);
+		
 		
 		int L_power_int, R_power_int;
-/*		
+		
 if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
                 L_power_int=options.power*L_power;
                 R_power_int=options.power*R_power;
@@ -273,17 +275,17 @@ if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
                 R_power_int=0;
 	
 		}
+		////////switched/////////
+		command.L_power=R_power_int;
+                command.R_power=L_power_int;
 
-		command.L_power=L_power_int;
-                command.R_power=R_power_int;
-*/
-                command.L_power=options.power*L_power;
-                command.R_power=options.power*R_power;
+               // command.L_power=options.power*L_power;
+               // command.R_power=options.power*R_power;
                 
 		command.timestamp=get_timestamp();
 		
                 lcm.publish("MOTOR",&command);
-		cout<<L_power<<"      "<<R_power<< "                  "<<largest_area<<endl;
+		cout<<command.L_power<<"      "<<command.R_power<< "                  "<<largest_area<<endl;
 		//runMotors(L_power_int,R_power_int);
 #endif
 

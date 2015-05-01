@@ -251,11 +251,20 @@ HSV_filter::HSV_filter()
 	RGB_filter_table=(uchar*)malloc(256*256*256*sizeof(uchar));
 	//RGB_filter_table[256*256*20+256*3+49]=33;
 	//cout<<(int)RGB_filter_table[256*256*20+256*3+49]<<endl;
-        H_low=0;
-        S_low=120;
+        H_low=108;
+        S_low=125;
         V_low=104;
 
-        H_high=10;
+        H_high=125;
+        S_high=248;
+        V_high=255;
+
+//yelow dock hopefully
+        H_low=88;
+        S_low=107;
+        V_low=176;
+
+        H_high=102;
         S_high=255;
         V_high=255;
 	
