@@ -19,8 +19,8 @@ from serial import Serial
 from xbee import ZigBee
 
 #Serial to LCM Mapping
-RxLCMMap = ["05EBOLA","pod_data","plane_override"]  #LCM Messages to receive
-TxLCMMap = ["05EBOLA","imu","gps"] 	#LCM Messages to Transmit
+RxLCMMap = ["05EBOLA","pod_data","plane_override"]  #LCM Messages to receive into plane
+TxLCMMap = ["05EBOLA","imu","gps"] 	#LCM Messages to Transmit out of plane
 
 #Setup Handler for LCM
 lc = lcm.LCM()
@@ -47,7 +47,7 @@ def lcmHandler(channelNameLCM, data):
     channelNum = TxLCMMap.index(channelNameLCM)
     #xbee.tx(dest_addr='\x00\x01', data='%s.%s' % (str(channelNum), data))
     xbee.tx(dest_addr_long='\x00\x13\xA2\x00\x40\xE2\x77\x3E',dest_addr='\xFF\xFE',data='%s.%s' % (str(channelNum), data) )
-    print "LCM!"
+    print "LCM!%s.%s" % ( str(channelNum),data)
 
 subscriptions = [lc.subscribe(name,lcmHandler) for name in TxLCMMap]
 
