@@ -126,16 +126,6 @@ iostream
 PCA9685.h
 /home/pi/avx/src/vision/PCA9685.h
 
-/home/pi/avx/src/vision/vision_core.cpp
-vision_core.hpp
-/home/pi/avx/src/vision/vision_core.hpp
-ctime
--
-string
--
-fstream
--
-
 /home/pi/avx/src/vision/vision_core.hpp
 opencv2/opencv.hpp
 /home/pi/avx/src/vision/opencv2/opencv.hpp

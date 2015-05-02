@@ -75,7 +75,8 @@ VideoWriter Initialize_output_video(VideoCapture inputVideo,string NAME )
     // Initializing video output file
     VideoWriter outputVideo;
     // TODO: get the right codec
-    int ex = static_cast<int>(inputVideo.get(CV_CAP_PROP_FOURCC));
+    //int ex = static_cast<int>(inputVideo.get(CV_CAP_PROP_FOURCC));
+	int ex=(int)"XVID";
     Size S = Size((int) inputVideo.get(CV_CAP_PROP_FRAME_WIDTH),    // Acquire input size, maybe use the global variables
                   (int) inputVideo.get(CV_CAP_PROP_FRAME_HEIGHT));
 
@@ -265,6 +266,16 @@ HSV_filter::HSV_filter()
         V_low=176;
 
         H_high=102;
+        S_high=255;
+        V_high=255;
+
+//red beacon
+
+        H_low=119;
+        S_low=136;
+        V_low=176;
+
+        H_high=137;
         S_high=255;
         V_high=255;
 	
