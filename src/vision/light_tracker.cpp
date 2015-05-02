@@ -89,6 +89,7 @@ if(-1==fd){
     //    return 2;
     avionics::vision_detection_t detection;
     avionics::motor_command_t command;
+    avionics::camera_logger_t camera_log;
 
 
 // alternative to test more
@@ -97,7 +98,7 @@ if(-1==fd){
     VideoCapture inputVideo=Initialize_input_video();
     if(!inputVideo.isOpened()) return -10; // check if we succeeded
     VideoWriter outputVideo;
-    if (options.save_video) outputVideo=Initialize_output_video(inputVideo,"tracking.avi");
+    if (options.save_video) outputVideo=Initialize_output_video(inputVideo,"tracking.h264");
 
     Mat frame,img, frameDetected, frameThresholded, img1,img2,img3,img4;
     HSV_filter filter;
@@ -134,8 +135,26 @@ if(-1==fd){
         while(true)
         {
 
-                inputVideo >> img; // get a new frame from camera		
+                inputVideo >> img; // get a new frame from camera
+                frame_time=clock(); // time the frame was taken
+		detection.frame_timestamp=get_timestamp();
+
+		//camera logger
+		char filename [200];
+		char timestamp_string[50];
 		
+		camera_log.timestamp=detection.frame_timestamp;
+		strcpy(filename,"/home/pi/avx/src/vision/camera_log/frame_");
+		sprintf(timestamp_string,"%lld",camera_log.timestamp);
+		strcat(filename,timestamp_string);
+		strcat(filename,".jpg");
+		imwrite(filename,img);
+		camera_log.filename=filename;
+		lcm.publish("CAMERA_LOG",&camera_log);
+		//imwrite("/home/pi/avx/src/vision/camera_log/frame.jpg",img);
+
+		
+		//to show the image on the screen	
 /*
 		frame=img.clone();
 		imshow("frame",frame);
@@ -145,8 +164,7 @@ if(-1==fd){
 		
 		
 		img_grey=Mat::zeros(img.rows,img.cols,CV_8UC1);
-                frame_time=clock(); // time the frame was taken
-                detection.frame_timestamp=frame_time;
+                //detection.frame_timestamp=frame_time;
                 update_FPS(frame_time);
 
 // copies another instance of the frame so we retain the original one for storing purpose
