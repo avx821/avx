@@ -1,4 +1,6 @@
-import lcm.lcm.*; import avionics.*; public class NavController {
+import lcm.lcm.*; 
+import avionics.*; 
+public class NavController {
 	boolean done=false;
 	int right; 
 	int left;

@@ -1,0 +1,29 @@
+import lcm.lcm.*;
+import avionics.*;
+
+public class motorSend{
+int left; 
+int right; 
+boolean enabled; 
+long time;
+LCM lcm; 
+motor_command_t comm; 
+	public motorSend(){
+	System.out.println("Sending motor commands");
+	lcm=LCM.getSingleton();;
+	comm=new motor_command_t();
+	}
+public void SendMotorCommand(int M, int RM){
+	comm.timestamp=System.nanoTime();
+	comm.L_power=LM;
+	comm.R_power=RM;
+	for(;;){
+	System.out.println("running");
+	lcm.publish("MOTOR", comm);
+		}
+	}
+public static void main(String[] args){
+	motorSend motor=new motorSend();
+	motor.sendMotorCommand(15,15);
+	}
+}
