@@ -20,17 +20,24 @@ public:
 	~Waypoint(){}
 
 	/**
-	 * Sets the waypoint's latitude, longitude, and altitude. The latitude must is 
-	 * measured in degrees and must be in the range -90 to 90 (inclusive). The 
-	 * longitude is measured in degrees and must be in the range -180 to 180
-	 * (inclusive). The altitude is measured in meters and must be nonnegative. 
-	 * The method will throw an exception if any parameters are out of range.
+	 * Sets the parameters that identify this waypoint's mission and location
+	 * within the mission. These parameters are not checked in any way and 
+	 * thus should be used carefully.
+	 *
+	 * @param mission_ID the integer identifying this waypoint's mission.
+	 * @param iterator_ID the integer identifying this waypoint's 
+	 * 		  location within its mission.
+	 */
+	void setMissionParameters(int mission_ID,
+							  int iterator_ID);
+
+	/**
+	 * Sets the waypoint's latitude, longitude, and altitude. Due to issues with
+	 * GPS noise, these inputs are unbounded, and thus should be used with care.
 	 * 
 	 * @param latitude The new latitude in degrees.
 	 * @param longitude The new longitude in degrees.
 	 * @param altitude The new altitude in meters.
-	 *
-	 * @throws WaypointException if any parameter is out of range.
 	 */
 	void setWaypoint(double latitude,
 					 double longitude,
@@ -47,6 +54,22 @@ public:
 	std::vector<double> getWaypoint();
 
 	/**
+	 * Accessor for this waypoint's mission ID. Does not check if the mission ID
+	 * has been instantiate and thus should be used with care.
+	 *
+	 * @return int The waypoint's mission ID.
+	 */
+	int getMission();
+
+	/**
+	 * Accessor for this waypoint's mission iterator.  Does not check if the 
+	 * iterator has been instantiated and thus should be used with care.
+	 *
+	 * @return int The waypoint's mission iterator.
+	 */
+	int getIterator();
+
+	/**
 	 * Calculated the approximate distance between the given waypoint and this 
 	 * waypoint in meters.  
 	 *
@@ -59,6 +82,16 @@ public:
 	double getDistance(Waypoint start);
 
 private:
+
+	/**
+	 * Stores the waypoint's mission ID.
+	 */
+	int mission;
+
+	/**
+	 * Stores the waypoint's number it its mission.
+	 */
+	int iterator;
 
 	/**
 	 * Stores the waypoint's latitude and longitude in degrees, and altitude in 

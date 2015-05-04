@@ -10,8 +10,12 @@ class WaypointException: public std::exception {
 	}
 };
 
-void Waypoint::setWaypoint(double latitude, double longitude, double altitude) {
+void Waypoint::setMissionParameters(int mission_ID, int iterator_ID) {
+	mission = mission_ID;
+	iterator = iterator_ID;
+}
 
+void Waypoint::setWaypoint(double latitude, double longitude, double altitude) {
 
 	// Delete former waypoint values.
 	waypoint.clear();
@@ -31,6 +35,14 @@ std::vector<double> Waypoint::getWaypoint() {
 
 	// If instantiated return the waypoint.
 	return waypoint;
+}
+
+int Waypoint::getMission() {
+	return mission;
+}
+
+int Waypoint::getIterator() {
+	return iterator;
 }
 
 double Waypoint::getDistance(Waypoint start) {

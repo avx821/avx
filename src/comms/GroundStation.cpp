@@ -6,6 +6,7 @@
 //Inclusions for lcm
 #include "lcm/lcm-cpp.hpp"
 #include "../lcm_headers/cpp/avionics/pod_data_t.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ int main(int argc, char ** argv)
     {
 	int entry = 0;
 	cout << "Enter command type: [int]" << endl;
-	    cin >> entry
+	    cin >> entry;
 	if(entry==0||entry>2) {
 	    cout << "Command not recognized\n";
 	    help();

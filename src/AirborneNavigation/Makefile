@@ -7,9 +7,9 @@ default: make
 # creates a binary of the program.
 #
 make: Waypoint.o WaypointManager.o
-	g++ -o AirNav Waypoint.o \
+	g++ -o AirborneNavigation Waypoint.o \
 		      WaypointManager.o \
-		      main.cpp -llcm
+		      AirborneNavigation.cpp -llcm
 
 # Compiles the Waypoint object file.
 #

@@ -53,7 +53,7 @@ private:
 	/**
 	 * The tolerance for hitting a waypoint in meters.
 	 */
-	static const double tolerance = 50;
+	static const double tolerance = 25;
 
 	/**
 	 * A vector containing the waypoints.

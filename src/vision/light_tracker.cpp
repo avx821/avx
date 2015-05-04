@@ -21,6 +21,8 @@ unsigned long long TIME;
 #define RUN_MOTORS 1
 #define OMP_WAIT_POLICY PASSIVE
 #define OWN_CV 0
+#define CAMERA_LOG 0
+#define DISPLAY 1
 //TODO set the environment variable
 // global variables
 double WIDTH = 1920;	// frame width
@@ -54,10 +56,10 @@ using namespace std;
 
 options_c::options_c()
 {
-    trackbar=false;
+    trackbar=true;
     equalization=false;
     morphological=false;
-    roi=true;
+    roi=false;
     save_video=false;
     power=20;
     area=25;
@@ -139,6 +141,8 @@ if(-1==fd){
                 frame_time=clock(); // time the frame was taken
 		detection.frame_timestamp=get_timestamp();
 
+
+#if CAMERA_LOG
 		//camera logger
 		char filename [200];
 		char timestamp_string[50];
@@ -152,14 +156,14 @@ if(-1==fd){
 		camera_log.filename=filename;
 		lcm.publish("CAMERA_LOG",&camera_log);
 		//imwrite("/home/pi/avx/src/vision/camera_log/frame.jpg",img);
-
+#endif
 		
 		//to show the image on the screen	
-/*
+#if DISPLAY
 		frame=img.clone();
 		imshow("frame",frame);
 		waitKey(3);
-*/
+#endif
 		
 		
 		
