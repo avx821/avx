@@ -123,8 +123,8 @@ int main(int,char**)
 int runMotors(double leftPercentInput, double rightPercentInput)
 {
 	
-    int leftPercent=(int)100*sqrt((leftPercentInput/100));
-    int rightPercent=(int)100*sqrt((rightPercentInput/100));
+    int leftPercent=(int)45*sqrt((leftPercentInput/100));
+    int rightPercent=(int)45*sqrt((rightPercentInput/100));
 
     pwm.setPWM(NAVIO_RCOUTPUT_1, 205+205*leftPercent/100);
     pwm.setPWM(NAVIO_RCOUTPUT_2, 205+205*rightPercent/100);

@@ -108,7 +108,7 @@ public class GPS_Navigation implements Runnable {
 		this.dest=this.calcWaypointfromPoint(RADIUS,this.dest,dest.heading);
 		this.heading=calcHaversineHeading(this.current,dest);
 		this.heading=wrapAngle(heading);
-		//System.out.println("Required heading: "+this.heading);
+		System.out.println("Required heading: "+this.heading);
 		this.vec=this.PointGPStoVector(current,dest);
 		this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
 		while(!controller.isDone()){

@@ -93,7 +93,7 @@ public class LCMData implements LCMSubscriber,Runnable {
 			//double Roll=Math.atan2(imu_acc[0],imu_acc[2]);
 			//double delta_my= magy*Math.cos(Roll)+magz*Math.sin(Roll);
 			//double delta_mx=magx*Math.cos(Pitch)+magy*Math.sin(Pitch)*Math.sin(Roll)-magz*Math.sin(Pitch)*Math.cos(Roll);
-			double magheading= -Math.atan2(magy,magx) ;
+			double magheading= -Math.atan2(magy,magx)-(Math.PI/2.0) ;
 			/*if(magx<(-_tolerance)){
 			magheading-=0.34;
 			magheading=(2*Math.PI)+magheading;
