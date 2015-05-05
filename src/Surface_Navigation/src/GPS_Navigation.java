@@ -54,7 +54,14 @@ public class GPS_Navigation implements Runnable {
 	}
 	// function that provides Angle wrap capability
 	double wrapAngle(double angle){
-			return angle%(2.0*Math.PI);
+			angle=angle%(2.0*Math.PI); 
+			if(angle>Math.PI){
+				angle=(2.0*Math.PI)-angle; 
+			}
+			else if(angle<-Math.PI){
+				angle=(2.0*Math.PI)+angle;
+			}
+		return angle; 
 	}
 	public PointGPS getCurrent() {
 		return current;
