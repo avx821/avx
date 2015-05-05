@@ -6,6 +6,8 @@
 using namespace cv;
 using namespace std;
 
+enum Color {red,green,yellow,none};
+
 class options_c
 {
     //TODO use a more efficient way of storing bool, if necessary. I dont plan to use it much anyways
@@ -56,7 +58,28 @@ public:
     Mat crop(Mat);
 };
 
-void update_FPS(int frame_time);
+int update_FPS_and_status(bool detected,int frame_time);
+
+class target{
+public:
+	Color color;
+	bool found;
+	target(Color c);
+	target();
+};
+
+class search_status
+
+{	
+public:
+	target primary;
+	target secondary;
+	Color last_secondary;
+	int cycle;
+	int cycle_period;
+	search_status();
+	void update();
+};
 
 class HSV_filter
     // HSV upper and lower bounds for the filters
@@ -67,7 +90,7 @@ public:
     int H_high,S_high,V_high;
     uchar saturation_table[256][256];
     uchar *RGB_filter_table;
-    HSV_filter();
+    HSV_filter(Color);
     void calibrate_window();
     void update_filter_table();
     uchar RGB_filter(uchar R, uchar G, uchar B);

@@ -132,27 +132,91 @@ Mat ROI_c::crop(Mat img)
 }
 
 
-void update_FPS(int frame_time)
+int update_FPS_and_status(bool detection,int frame_time)
 {
+    int publish_mode=0;// dont publish
     static int frame_count=-1;
     static int last_second=0;
     static int start_time=frame_time;
+    
 
     frame_count=frame_count+1;
+
+    static int detection_count=0;
+    static int total_count=-1;
+    total_count++;
+    if(detection) detection_count++;;
+
 
     if(last_second<(frame_time-start_time)/1000000) // new second
     {
         last_second=(frame_time-start_time)/1000000;
-        cout<<"FPS: "<< frame_count<< "\n";
-        frame_count=0;
+        cout<<"\nFPS: "<< frame_count<< "  detection_rate: "<<detection_count<<" / "<<total_count<<"\n";
+	if(detection_count>total_count/3) publish_mode=2; // found pod
+	else publish_mode=1;
+        frame_count=detection_count=total_count=0;
     }
+    return publish_mode; 
+}
+
+search_status::search_status(){
+	cycle_period=20;
+	cycle=cycle_period-1;
+	primary=target(green);
+	secondary=target(none);
+	last_secondary=red;
+}
+void search_status::update(){
+	switch(primary.color){
+		case green:
+			switch (secondary.color){
+				case yellow:
+					if(secondary.found){// move forward to yellow
+						cout<<"yellow found"<<endl;
+						primary.color=yellow;
+						secondary.color=none; //redundant
+						cycle=0;
+					}
+				break;
+				
+				case red: break; // TODO add someting to make the turn
+                                case none: break;
+				default: cout<<"unexpected case in search_status::update()"<<endl; break;
+			}
+			//alternates between secondary targets
+			if(cycle==cycle_period){
+				cycle=0;
+				if(last_secondary==red) secondary.color=yellow;
+				else secondary.color=red;
+				last_secondary=secondary.color;
+			}
+			else secondary.color=none;
+			
+			
+		break;
+
+
+		case yellow:
+		cycle=cycle_period;
+		break;
+	
+	
+	}
+cycle++;
+	
+}
+target::target(){
+	color=none;
+	found=false;
+}
+target::target(Color target_color){
+	color=target_color;
+	found=false;
 }
 
 
 
-
-
-HSV_filter::HSV_filter()
+HSV_filter::HSV_filter(Color target_color)
 {
         for(int j=0;j<=255;j++)
 	{
@@ -259,7 +323,13 @@ HSV_filter::HSV_filter()
         S_high=248;
         V_high=255;
 
-//yelow dock hopefully
+
+
+
+	switch (target_color)
+	{
+		case yellow:
+		//yelow dock hopefully
         H_low=88;
         S_low=107;
         V_low=176;
@@ -267,8 +337,9 @@ HSV_filter::HSV_filter()
         H_high=102;
         S_high=255;
         V_high=255;
-
-//red beacon
+		break;
+		case red:
+		//red beacon
 
         H_low=119;
         S_low=136;
@@ -277,6 +348,55 @@ HSV_filter::HSV_filter()
         H_high=137;
         S_high=255;
         V_high=255;
+		break;
+		case green:
+		//green beacon TODO ( recalibrate)
+
+        H_low=30;
+        S_low=136;
+        V_low=176;
+
+        H_high=61;
+        S_high=255;
+        V_high=255;
+		break;
+	}
+//-------------------- for lab use
+	switch (target_color)
+	{
+		case yellow:
+		//yelow dock hopefully
+        H_low=85;
+        S_low=141;
+        V_low=220;
+
+        H_high=102;
+        S_high=255;
+        V_high=250;
+		break;
+		case red:
+		//red beacon
+
+        H_low=119;
+        S_low=136;
+        V_low=176;
+
+        H_high=137;
+        S_high=255;
+        V_high=255;
+		break;
+		case green:
+		//green beacon TODO ( recalibrate)
+
+        H_low=45;
+        S_low=168;
+        V_low=027;
+
+        H_high=73;
+        S_high=255;
+        V_high=255;
+		break;
+	}
 	
 }
 
@@ -294,7 +414,7 @@ void HSV_filter::update_filter_table(){
 				RGB_filter_table[a*256*256+b*256+c]=RGB_filter(a,b,c);
 			}
 			update_table=false;
-			//cout<<"created filter"<<endl;
+			cout<<"created filter "<<" a random value: "<<RGB_filter_table[76*256*256+23*256+15]<<endl;
 	
 }
 void HSV_filter::thresholding_table(Mat img,Mat img_grey){
@@ -352,6 +472,7 @@ void HSV_filter::thresholding_dynamic(Mat img,Mat img_grey){
                     for (int j = 0,jg=0; j < nCols; j+=3, jg+=1)
                     {
 			uchar R,G,B;
+			//wrong because oopencv values are wrong so we keep it for now
                         R=p[j];//B 2
                         G=p[j+1];//G 1
                         B=p[j+2];//R 0
@@ -378,11 +499,12 @@ uchar HSV_filter::RGB_filter (uchar R, uchar G, uchar B)
 		
 		}*/
 		uchar H,S,V,vmid,vmin,greater;
+		greater=2;
 		V=B;
 		vmid=G;
 		vmin=R;
 		H=S=0;
-		SWAP(V,vmid,greater,1);
+		SWAP(V,vmid,greater,1);  
                 SWAP(V,vmin,greater,0);
                 SWAP(vmid,vmin,greater,greater);
 
@@ -406,23 +528,62 @@ uchar HSV_filter::RGB_filter (uchar R, uchar G, uchar B)
 			//cout<<"V"<<(int)V<<" vmin"<<(int)vmin<<" S"<<(int)S<<" other"<<(int)other<<endl;
 			//cout<<"RGB "<<(int)R<<" "<<(int)G<<" "<<(int)B<<"  S "<<(int)S<<endl;
 		}
-
-			if(S!=0){
-			double H_float;
-			switch(greater){
+// using char might be faster
+		 	if(S!=0){
+				switch(greater){
 			
-			case 0:
-				H=42*(G-B)/(V-vmin);break; //-43(212) to 43
-			case 1:
-				H=84+42*(B-R)/(V-vmin); //43 to 129
+				case 0:
+					H=42*(G-B)/(V-vmin);break; //-43(212) to 43   original 42
+				case 1:
+					H=84+42*(B-R)/(V-vmin); //43 to 129 original 84 +42
 				//cout<<"B "<<(int)B<<" R "<<(int)R<<" V "<<(int)V<<" vmin "<<(int)vmin<<" coef "<<(int)(43*(B-R)/(V-vmin)) <<endl;
-				break;
-			case 2:
-				H=170+42*(R-G)/(V-vmin);// 127 to 213
+					break;
+				case 2:
+					H=170+42*(R-G)/(V-vmin);// 127 to 213  original 170 + 42
 				
-				break;			
+					break;			
+				}
+				H=H*180/255; // to conform with opencv 0-180 scale
 			}
+
+//with float seems to work anyway
+/*
+			if(S!=0){
+				float Hf,Bf,Gf,Rf,Vf,vminf;
+				Bf=((float)B);
+				Gf=((float)G);
+				Rf=((float)R);
+				Vf=((float)V);
+				vminf=((float)vmin);
+
+				//if(Rf>Gf&&Rf>Bf) greater=0;
+				//if(Gf>Rf&&Gf>Bf) greater=1;
+				//if(Bf>Rf&&Bf>Gf) greater=2;
+				//vminf=min(Rf,min(Gf,Bf));
+				switch(greater){
+			
+				case 0:
+					if(Vf!=Rf)cout<<" invalid case 0"<<endl;
+					Hf=60*(Gf-Bf)/(Vf-vminf);break; //-43(212) to 43
+				case 1:
+					if(Vf!=Gf)cout<<" invalid case 1 "<<Vf<<"  "<< Gf<<endl;
+					Hf=120+60*(Bf-Rf)/(Vf-vminf); //43 to 129
+				//cout<<"B "<<(int)B<<" R "<<(int)R<<" V "<<(int)V<<" vmin "<<(int)vmin<<" coef "<<(int)(43*(B-R)/(V-vmin)) <<endl;
+					break;
+				case 2:
+					if(Vf!=Bf)cout<<" invalid case 2"<<endl;
+					Hf=240+60*(Rf-Gf)/(Vf-vminf);// 127 to 213
+				
+					break;			
+				}
+				if(Hf<0) {
+					Hf=Hf+360;H=Hf/2;
+					//cout<<Hf<<"   "<<(int)H<<endl;
+				}
+				H=Hf/2;
+				//if(R==B) cout<<(int)R<<"  "<<(int)G<<"  "<<(int)B<<"  "<<(int)H<<"  "<<Hf<<"  "<<Vf<<"   "<<vminf<<endl;
 			}
+	*/	
 
 		        if((H>=H_low)&&(H<=H_high)&&(S>=S_low)&&(S<=S_high)&&(V>=V_low)&&(V<=V_high))
 				return 255;
