@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 #include "lcm/lcm-cpp.hpp"
 
@@ -61,6 +62,9 @@ public:
         data.gps[0] = goal[0];
         data.gps[1] = goal[1];
         data.gps[2] = goal[2];
+
+	cout << "Reported Location: Lat: " << message->lat << " Lon: " << message->lon << "Alt: " << message->alt << endl;
+	cout << "Target Location: Lat: " << goal[0] << " Lon: " << goal[1] << " Alt: " << goal[2] << endl << endl;
     }
 
     /**
@@ -123,12 +127,12 @@ int main(int argc, const char* argv[]) {
     navigator.setWaypoints(waypoints);
 
     // Subscribe to Navio+ GPS publishing channel.
-	lcm.subscribe("gps", &AirborneNavigation::handleMessage, &navigator);
+    lcm.subscribe("gps", &AirborneNavigation::handleMessage, &navigator);
 		
-	// Read LCM messages until we recieve an error.
-	avionics::waypoint_t myData;
-	while(lcm.handle() == 0) {
-		myData = navigator.getData();
+    // Read LCM messages until we recieve an error.
+    avionics::waypoint_t myData;
+    while(lcm.handle() == 0) {
+	myData = navigator.getData();
         lcm.publish("waypoint", &myData);
         sleep(0.2);
     }

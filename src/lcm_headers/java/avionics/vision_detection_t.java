@@ -17,14 +17,16 @@ public final class vision_detection_t implements lcm.lcm.LCMEncodable
     public double x;
     public double y;
     public double area;
-    public short number_of_objects;
+    public int number_of_objects;
+    public int type;
+    public int color;
  
     public vision_detection_t()
     {
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0x8a80c2a5dad87476L;
+    public static final long LCM_FINGERPRINT_BASE = 0xee8ce710fcd43b04L;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -62,7 +64,11 @@ public final class vision_detection_t implements lcm.lcm.LCMEncodable
  
         outs.writeDouble(this.area); 
  
-        outs.writeShort(this.number_of_objects); 
+        outs.writeInt(this.number_of_objects); 
+ 
+        outs.writeInt(this.type); 
+ 
+        outs.writeInt(this.color); 
  
     }
  
@@ -100,7 +106,11 @@ public final class vision_detection_t implements lcm.lcm.LCMEncodable
  
         this.area = ins.readDouble();
  
-        this.number_of_objects = ins.readShort();
+        this.number_of_objects = ins.readInt();
+ 
+        this.type = ins.readInt();
+ 
+        this.color = ins.readInt();
  
     }
  
@@ -120,6 +130,10 @@ public final class vision_detection_t implements lcm.lcm.LCMEncodable
         outobj.area = this.area;
  
         outobj.number_of_objects = this.number_of_objects;
+ 
+        outobj.type = this.type;
+ 
+        outobj.color = this.color;
  
         return outobj;
     }

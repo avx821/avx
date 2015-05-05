@@ -12,9 +12,9 @@ public class GPS_Navigation implements Runnable {
 	 NavController controller; 
 	 final static double GPS_ACCURACY=1; // degree of accuracy of GPS in m
 	 final static double LAT_TO_METERS=1.106E5;
-	 final static double LNG_TO_METERS=1.113E5;
+	 final static double LNG_TO_METERS=LAT_TO_METERS;
 	 final static double _tolerance=1E-6; 
-	 double omega=0.0; 
+	 double omega=0.0;
 	 double speed=0.0;
 	 boolean Arrived=false;
 	public GPS_Navigation(PointGPS start, PointGPS goal){
@@ -22,10 +22,10 @@ public class GPS_Navigation implements Runnable {
 		this.start=start;
 		this.start.setHeading(0.0);
 		this.dest=this.calcWaypointfromPoint(RADIUS,goal,goal.heading);
-		System.out.println("New Destination: ["+dest.lat+", "+dest.lng+"]");
+		//System.out.println("New Destination: ["+dest.lat+", "+dest.lng+"]");
 		this.heading=calcHaversineHeading(this.start,dest);
-		this.heading=180*wrapAngle(heading)/Math.PI;
-		System.out.println("Delta heading command: "+this.heading);
+		this.heading=wrapAngle(heading);
+		//System.out.println("Delta heading command: "+(this.heading*180/Math.PI));
 	}
 	waypointVector PointGPStoVector(PointGPS from, PointGPS to){
 		double delta_x=(to.getLat()-from.getLat())*LAT_TO_METERS; 
@@ -34,15 +34,15 @@ public class GPS_Navigation implements Runnable {
 		return new waypointVector(delta_x,delta_y,delta_z);
 	}
 	public GPS_Navigation(LCMData sComm,PointGPS goal){
-			this.sysComm=sComm;
+		this.sysComm=sComm;
 		this.start=new PointGPS(sComm.getLatitude(), sComm.getLongitude(),0.0);
 		start.setHeading(Math.toRadians(sComm.getHeading()));
 		this.dest=goal;
 		this.controller=new NavController(this);
 	}
 	PointGPS calcWaypointfromPoint(double dist, PointGPS fp, double bearing){
-		double delta_x=dist*Math.sin(bearing); 
-		double delta_y=dist*Math.cos(bearing); 	
+		double delta_x=dist*Math.sin(bearing);
+		double delta_y=dist*Math.cos(bearing);
 		double delta_phi=delta_y/LAT_TO_METERS; 
 		double delta_lambda=delta_x/LNG_TO_METERS; 
 		double new_x=fp.getLat()-delta_phi; 
@@ -76,11 +76,10 @@ public class GPS_Navigation implements Runnable {
 	}
 	// calculate the relative bearing between two GPS points
 	public double calcHaversineHeading(PointGPS to, PointGPS from){
-		double delta_lat=to.getLat()-from.getLat();
-		double delta_lon=to.getLng()-from.getLng(); 
-		double a=(Math.sin(delta_lat/2.0)*Math.sin(delta_lat/2.0))+Math.cos(from.getLat())*Math.cos(to.getLat())*(Math.sin(delta_lon/2.0)*Math.sin(delta_lon/2.0));
-		double c=2.0*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-		return c; 
+		double delta_lat=to.getLat()-from.getLat()*LAT_TO_METERS;
+		double delta_lon=to.getLng()-from.getLng()*LNG_TO_METERS;
+		double c=Math.atan2(delta_lon,delta_lat)+ Math.PI;
+		return c;
 	}
 	@Override
 	public void run() {
@@ -92,7 +91,7 @@ public class GPS_Navigation implements Runnable {
 			// update these to format in LCM data types
 			this.current=new PointGPS(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude()); 
 			this.current.setHeading(sysComm.getHeading());
-			//System.out.println("Got GPS and heading data");
+			System.out.println("Aircraft heading: "+this.current.getHeading());
 		}
 		else{
 			// get old value of current location from memory
@@ -102,6 +101,7 @@ public class GPS_Navigation implements Runnable {
 		this.dest=this.calcWaypointfromPoint(RADIUS,this.dest,dest.heading);
 		this.heading=calcHaversineHeading(this.current,dest);
 		this.heading=wrapAngle(heading);
+		//System.out.println("Required heading: "+this.heading);
 		this.vec=this.PointGPStoVector(current,dest);
 		this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
 		while(!controller.isDone()){
@@ -113,8 +113,10 @@ public class GPS_Navigation implements Runnable {
 			this.vec=this.PointGPStoVector(this.current,dest);
 			this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
 			this.heading=this.calcHaversineHeading(this.current,dest);
-			double delta_heading=this.heading-dest.heading;
-			delta_heading=wrapAngle(delta_heading);
+			this.heading=wrapAngle(this.heading);
+			double delta_heading=this.heading-current.heading;
+			System.out.println("Distance:" +this.distance);
+			//delta_heading=wrapAngle(delta_heading);
 			controller.updateState(distance,delta_heading);
 			//System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
 		}
@@ -142,8 +144,7 @@ public class GPS_Navigation implements Runnable {
 				PointGPS goal=new PointGPS(Glat,Glng,0.0);
 				// set heading for goal and start GPS points
 				goal.setHeading(Math.toRadians(Double.parseDouble(args[2])));
-				MovingFilter filter=new MovingFilter();
-				LCMData sComm= new LCMData(filter);		
+				LCMData sComm= new LCMData();		
 				// set limits for heading here or in set method
 				Thread sysThread=new Thread(sComm);
 				//HeadingCalibration cal=new HeadingCalibration(filter,sysComm);

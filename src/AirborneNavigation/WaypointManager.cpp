@@ -23,8 +23,6 @@ void WaypointManager::setWaypoints(std::vector<Waypoint> waypoints) {
 Waypoint WaypointManager::getCurrentWaypoint() {
 
 	// Check if we are within the tolerance of the current waypoint.
-	double shit = vehicle.getDistance(myWaypoints[current]);
-	std::cout << "Distance to waypoint: " << shit << "m" << std::endl;
 	if (vehicle.getDistance(myWaypoints[current]) < tolerance) {
 
 		// Increment to the next waypoint.

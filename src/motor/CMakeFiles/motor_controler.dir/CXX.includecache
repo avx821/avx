@@ -97,6 +97,8 @@ PCA9685.cpp
 /home/pi/avx/src/motor/PCA9685.cpp
 gpio.cpp
 /home/pi/avx/src/motor/gpio.cpp
+I2Cdev.cpp
+/home/pi/avx/src/motor/I2Cdev.cpp
 iostream
 -
 

@@ -28,7 +28,11 @@ class vision_detection_t
 
         double     area;
 
-        int16_t    number_of_objects;
+        int32_t    number_of_objects;
+
+        int32_t    type;
+
+        int32_t    color;
 
     public:
         /**
@@ -144,7 +148,13 @@ int vision_detection_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->area, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int16_t_encode_array(buf, offset + pos, maxlen - pos, &this->number_of_objects, 1);
+    tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->number_of_objects, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
+    tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->type, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
+    tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->color, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -172,7 +182,13 @@ int vision_detection_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->area, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int16_t_decode_array(buf, offset + pos, maxlen - pos, &this->number_of_objects, 1);
+    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->number_of_objects, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
+    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->type, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
+    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->color, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -187,13 +203,15 @@ int vision_detection_t::_getEncodedSizeNoHash() const
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
-    enc_size += __int16_t_encoded_array_size(NULL, 1);
+    enc_size += __int32_t_encoded_array_size(NULL, 1);
+    enc_size += __int32_t_encoded_array_size(NULL, 1);
+    enc_size += __int32_t_encoded_array_size(NULL, 1);
     return enc_size;
 }
 
 int64_t vision_detection_t::_computeHash(const __lcm_hash_ptr *)
 {
-    int64_t hash = 0x8a80c2a5dad87476LL;
+    int64_t hash = 0xee8ce710fcd43b04LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

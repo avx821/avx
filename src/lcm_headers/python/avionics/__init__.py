@@ -4,7 +4,12 @@ DO NOT MODIFY BY HAND!!!!
 """
 
 from .camera_logger_t import camera_logger_t
+from .mode_status_t import mode_status_t
 from .motor_command_t import motor_command_t
+from .navio_gps_t import navio_gps_t
+from .navio_imu_t import navio_imu_t
+from .pod_data_t import pod_data_t
+from .state_machine_mode_t import state_machine_mode_t
 from .vision_detection_t import vision_detection_t
 from .vision_options_t import vision_options_t
 from .waypoint_t import waypoint_t

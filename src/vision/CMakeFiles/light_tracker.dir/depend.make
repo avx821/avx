@@ -8,7 +8,12 @@ CMakeFiles/light_tracker.dir/light_tracker.cpp.o: /home/pi/avx/Navio/C++/Navio/I
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: /home/pi/avx/Navio/C++/Navio/PCA9685.h
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/all_cpp_lcm_types.hpp
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/camera_logger_t.hpp
+CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/mode_status_t.hpp
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/motor_command_t.hpp
+CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/navio_gps_t.hpp
+CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/navio_imu_t.hpp
+CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/pod_data_t.hpp
+CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/vision_detection_t.hpp
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/vision_options_t.hpp
 CMakeFiles/light_tracker.dir/light_tracker.cpp.o: ../lcm_headers/cpp/avionics/waypoint_t.hpp
@@ -80,7 +85,12 @@ CMakeFiles/light_tracker.dir/motor_control.cpp.o: motor_control.hpp
 
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/all_cpp_lcm_types.hpp
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/camera_logger_t.hpp
+CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/mode_status_t.hpp
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/motor_command_t.hpp
+CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/navio_gps_t.hpp
+CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/navio_imu_t.hpp
+CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/pod_data_t.hpp
+CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/vision_detection_t.hpp
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/vision_options_t.hpp
 CMakeFiles/light_tracker.dir/vision_core.cpp.o: ../lcm_headers/cpp/avionics/waypoint_t.hpp

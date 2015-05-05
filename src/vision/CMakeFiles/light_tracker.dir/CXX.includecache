@@ -31,8 +31,18 @@ I2Cdev.h
 /home/pi/avx/src/vision/../lcm_headers/cpp/all_cpp_lcm_types.hpp
 avionics/camera_logger_t.hpp
 /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/camera_logger_t.hpp
+avionics/mode_status_t.hpp
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/mode_status_t.hpp
 avionics/motor_command_t.hpp
 /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/motor_command_t.hpp
+avionics/navio_gps_t.hpp
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_gps_t.hpp
+avionics/navio_imu_t.hpp
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_imu_t.hpp
+avionics/pod_data_t.hpp
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/pod_data_t.hpp
+avionics/state_machine_mode_t.hpp
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
 avionics/vision_detection_t.hpp
 /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/vision_detection_t.hpp
 avionics/vision_options_t.hpp
@@ -46,7 +56,27 @@ lcm/lcm_coretypes.h
 string
 -
 
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/mode_status_t.hpp
+lcm/lcm_coretypes.h
+-
+
 /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/motor_command_t.hpp
+lcm/lcm_coretypes.h
+-
+
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_gps_t.hpp
+lcm/lcm_coretypes.h
+-
+
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_imu_t.hpp
+lcm/lcm_coretypes.h
+-
+
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/pod_data_t.hpp
+lcm/lcm_coretypes.h
+-
+
+/home/pi/avx/src/vision/../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
 lcm/lcm_coretypes.h
 -
 
@@ -100,6 +130,8 @@ string.h
 stdlib.h
 -
 stdio.h
+-
+iomanip
 -
 pthread.h
 -

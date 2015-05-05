@@ -7,6 +7,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "I2Cdev.cpp"
 #include "../lcm_headers/cpp/avionics/motor_command_t.hpp"
+#include "../lcm_headers/cpp/avionics/state_machine_mode_t.hpp"
 
 
 #define NAVIO_RCOUTPUT_1 3

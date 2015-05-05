@@ -9,7 +9,12 @@ CMakeFiles/light_tracker.dir/light_tracker.cpp.o
  /home/pi/avx/Navio/C++/Navio/PCA9685.h
  /home/pi/avx/src/vision/../lcm_headers/cpp/all_cpp_lcm_types.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/camera_logger_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/mode_status_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/motor_command_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_gps_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_imu_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/pod_data_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/vision_detection_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/vision_options_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/waypoint_t.hpp
@@ -81,7 +86,12 @@ CMakeFiles/light_tracker.dir/motor_control.cpp.o
 CMakeFiles/light_tracker.dir/vision_core.cpp.o
  /home/pi/avx/src/vision/../lcm_headers/cpp/all_cpp_lcm_types.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/camera_logger_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/mode_status_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/motor_command_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_gps_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/navio_imu_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/pod_data_t.hpp
+ /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/vision_detection_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/vision_options_t.hpp
  /home/pi/avx/src/vision/../lcm_headers/cpp/avionics/waypoint_t.hpp

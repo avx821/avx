@@ -95,7 +95,7 @@ if(-1==fd){
     avionics::motor_command_t command;
     avionics::camera_logger_t camera_log;
     avionics::mode_status_t mode_status; //1 looking for the pod and 2 when you see it
-    mode_status.Mode_ID=1;
+    mode_status.Mode_ID=2;
 
 
 

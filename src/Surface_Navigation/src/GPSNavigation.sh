@@ -8,7 +8,5 @@ echo "starting imu publishing"
 ./../../imu_pub &
 #echo "running GPS Nav code"
 ./../../gps_pub &
-#echo "running motor listener"
-sudo ./../../motor/motor_controler & 
 #./../../../../Downloads/lcm/lcm-logger
-java -cp lcm.jar:avionics.jar:. GPS_Navigation 42.359 -72.09 60.0
+java -cp lcm.jar:avionics.jar:. GPS_Navigation 0.0001 0.00 0.0

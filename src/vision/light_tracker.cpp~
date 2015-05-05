@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iomanip> // for setw 
 //#include "filter_v2.hpp"
 
 double X_VALUE;
@@ -22,6 +23,8 @@ unsigned long long TIME;
 #define OMP_WAIT_POLICY PASSIVE
 #define OWN_CV 0
 #define CAMERA_LOG 0
+#define DISPLAY 1
+#define SWITCHING 0
 //TODO set the environment variable
 // global variables
 double WIDTH = 1920;	// frame width
@@ -55,7 +58,7 @@ using namespace std;
 
 options_c::options_c()
 {
-    trackbar=true;
+    trackbar=false;
     equalization=false;
     morphological=false;
     roi=false;
@@ -91,9 +94,35 @@ if(-1==fd){
     avionics::vision_detection_t detection;
     avionics::motor_command_t command;
     avionics::camera_logger_t camera_log;
+    avionics::mode_status_t mode_status; //1 looking for the pod and 2 when you see it
+    mode_status.Mode_ID=1;
 
 
-// alternative to test more
+
+    Mat frame,img, frameDetected, frameThresholded;
+    HSV_filter filter_dock=HSV_filter((Color)yellow);
+    HSV_filter filter_beacon_red=HSV_filter((Color)red);
+    HSV_filter filter_beacon_green=HSV_filter((Color)green);
+    HSV_filter *filter;
+#if OWN_CV
+    if(!options.trackbar){
+	filter_beacon_green.update_filter_table();
+#if SWITCHING
+	filter_dock.update_filter_table();
+	filter_beacon_red.update_filter_table();
+#endif
+
+     }
+#endif
+
+    Point2f mc, center;
+    double x_value=0;
+    double y_value=0;
+    float radius;
+    int largest_area;
+
+
+	// alternative to test more
 //CCamera* cam = StartCamera(WIDTH, HEIGHT,15,1,false);
 
     VideoCapture inputVideo=Initialize_input_video();
@@ -101,18 +130,13 @@ if(-1==fd){
     VideoWriter outputVideo;
     if (options.save_video) outputVideo=Initialize_output_video(inputVideo,"tracking.h264");
 
-    Mat frame,img, frameDetected, frameThresholded, img1,img2,img3,img4;
-    HSV_filter filter;
-    Point2f mc, center;
-    double x_value=0;
-    double y_value=0;
-
     clock_t start_time=clock();
     clock_t frame_time;
     unsigned long long last_detection_time;
 
-    update_FPS(start_time);// sets the starting time to the FPS counter
-    ROI_c ROI, ROI_1,ROI_2,ROI_3,ROI_4;
+    update_FPS_and_status(false,start_time);// sets the starting time to the FPS counter
+    search_status search;
+    ROI_c ROI;
     bool thresholded_ready=false;
     cout<<"FPS: "<<inputVideo.get(CV_CAP_PROP_FPS)<<endl;
 
@@ -128,14 +152,14 @@ if(-1==fd){
       //TODO thats a quickfix
       inputVideo >> img; // get a new frame from camera
       img_grey=Mat::zeros(img.rows,img.cols,CV_8UC1);
-
+      
 
 //------------------------------------------------------
    //for(int rou=1;rou<100000;rou++)
 
         while(true)
         {
-
+		
                 inputVideo >> img; // get a new frame from camera
                 frame_time=clock(); // time the frame was taken
 		detection.frame_timestamp=get_timestamp();
@@ -166,15 +190,34 @@ if(-1==fd){
 		
 		
 		
-		img_grey=Mat::zeros(img.rows,img.cols,CV_8UC1);
-                //detection.frame_timestamp=frame_time;
-                update_FPS(frame_time);
+		
 
 // copies another instance of the frame so we retain the original one for storing purpose
                 if(options.save_video||SHOW_DETECTED)frame=img.clone();
 
+
+Color target;
+int number_of_scans;
+if(search.secondary.color==none) number_of_scans=1;
+else number_of_scans=2;
+
+
+for (int scan_number=number_of_scans;scan_number>=1;scan_number--){ // we start from 2 and decrease because we only crop in 1
+	img_grey=Mat::zeros(img.rows,img.cols,CV_8UC1);
+
+	switch (scan_number) {
+		case 1: target=search.primary.color; break;
+		case 2: target=search.secondary.color; break;
+	}
+	switch (target) {
+		case red: filter=&filter_beacon_red; break;
+		case green: filter=&filter_beacon_green; break;
+		case yellow: filter=&filter_dock; break;
+	}
+
+
 // selects only the image portion determined by the Region of interest
-                if (options.roi&&ROI.use) 
+                if (options.roi&&ROI.use&&scan_number==1) 
 		{
 			img=ROI.crop(img);
 			img_grey=ROI.crop(img_grey);
@@ -182,39 +225,40 @@ if(-1==fd){
 
                 if(options.equalization) equalize(frame,img);
 #if !OWN_CV
-		//frame=img.clone();
-		Mat img_grey=threshold_HSV(img,filter);
+		frame=img.clone();
+		Mat img_grey=threshold_HSV(frame,*filter);
 #endif
 
 #if OWN_CV
 		if(options.trackbar){
-			filter.thresholding_dynamic(img,img_grey);
+			(*filter).thresholding_dynamic(img,img_grey);
 		}
 		else{
-			if(filter.update_table) filter.update_filter_table();
-			filter.thresholding_table(img,img_grey);
-			//imshow("thresh table",img_grey);
+			if((*filter).update_table) (*filter).update_filter_table();
+			(*filter).thresholding_table(img,img_grey);
+			//imshow("table",img_grey);
 			//waitKey(2);
 			
-		}		 
+			
+		}
+		 
                	            	
 #endif      
-
-          if(options.trackbar)
+		thresholded_ready=false;
+         	 if(options.trackbar&&scan_number==1)
                 {
-                    filter.calibrate_window();
+                    (*filter).calibrate_window();
                     frameThresholded=img_grey.clone();
                     thresholded_ready=true;
                 }
-
-
+		
                 if (options.morphological) morphological(img);
 
 
                 // Contour analysis
-                int largest_area = 0;
+                largest_area = 0;
                 int largest_contour_index = 0;
-                float radius=0; // also used as a flag: if 0, it means we don't do cropping as we haven't found the target
+                radius=0; // also used as a flag: if 0, it means we don't do cropping as we haven't found the target
                 vector<vector<Point> > contours; // Vector for storing contour
                 vector<Vec4i> hierarchy;
                 findContours(img_grey, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
@@ -263,15 +307,51 @@ if(-1==fd){
                     center= Point2f(0,0);
                     x_value=0;
                     y_value=0;
-
-
                 }
+
+		switch (scan_number) {
+			case 1: search.primary.found=detection.detected; break;
+			case 2: 
+				search.secondary.found=detection.detected; 
+				//cout<<"searched for secondary result: "<<(int)detection.detected<<"area: "<< largest_area<<" target "<<target<<endl; 
+				break;
+		}
+		
+		
                 detection.x=x_value;
                 detection.y=y_value;
 		
                 detection.area=largest_area;
                 detection.timestamp=get_timestamp();
+		detection.type=scan_number;
+		detection.color=target;
                 lcm.publish("VISION",&detection);
+		
+}
+		int mode_status_to_publish=update_FPS_and_status(detection.detected,frame_time);
+		if(mode_status_to_publish){
+			mode_status.Status_ID=mode_status_to_publish;
+			lcm.publish("mode1_status",&mode_status);
+		}
+				// change of target
+		/*
+			start- primary green
+			secondary- red, yellow, red, yellow
+			
+			found red- do nothing for now, but should tell task manager
+			found yellow- switch to primary yellow and secondary none
+			
+		*/
+		// report status for debugging
+		cout<<" cycle: "<<setw(2)<<search.cycle<<" scans: "<<number_of_scans<<" prim: "<<search.primary.color<<" r:"<<search.primary.found\
+					     <<" second: "<<search.secondary.color<<" r:"<<search.secondary.found<<"  ";
+		//if(number_of_scans==2) cout<<cout<<" Also searched: "<< search.secondary.color<<" result: "<<search.secondary.found;
+		//cout<<endl;
+		
+#if SWITCHING
+		search.update();
+#endif
+		search.primary.found=search.secondary.found=false;
                 center=ROI.origin+center;
 		X_VALUE=x_value;
 		Y_VALUE=y_value;
@@ -287,15 +367,17 @@ if(-1==fd){
 		
 		int L_power_int, R_power_int;
 		
-if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
+		if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
                 L_power_int=options.power*L_power;
                 R_power_int=options.power*R_power;
 		}
 		else{
 		L_power_int=0;
                 R_power_int=0;
-	
+			
+		if(search.primary.color==yellow) search=search_status();
 		}
+		
 		////////switched/////////
 		command.L_power=R_power_int;
                 command.R_power=L_power_int;
@@ -306,7 +388,7 @@ if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
 		command.timestamp=get_timestamp();
 		
                 lcm.publish("MOTOR",&command);
-		cout<<command.L_power<<"      "<<command.R_power<< "                  "<<largest_area<<endl;
+		cout<<" cmd: "<<command.L_power<<"    "<<command.R_power<< "       "<<largest_area<<endl;
 		//runMotors(L_power_int,R_power_int);
 #endif
 
@@ -334,14 +416,16 @@ if(detection.detected||(detection.timestamp-last_detection_time)<timeout_gvc){
 				cvDestroyWindow("frame thresholded");
 				cvDestroyWindow("trackbar");
 				options.trackbar=false;
-				filter.update_table=true;
+				(*filter).update_table=true;
 			}	
+
 	}
        
     //free options
     return 0;
 }
+/*
 uchar RGB2HSV2filter (uchar R,uchar G, uchar B, uchar H, uchar S, uchar V,HSV_filter filter){
 		return R;
 
-}
+}*/

@@ -24,4 +24,4 @@ WaypointManager.o:
 # Deletes all object files and binaries.
 #
 clean: 
-	rm AirNav *.o
+	rm AirborneNavigation *.o
