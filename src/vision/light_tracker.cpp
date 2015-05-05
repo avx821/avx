@@ -331,7 +331,7 @@ for (int scan_number=number_of_scans;scan_number>=1;scan_number--){ // we start 
 		int mode_status_to_publish=update_FPS_and_status(detection.detected,frame_time);
 		if(mode_status_to_publish){
 			mode_status.Status_ID=mode_status_to_publish;
-			lcm.publish("mode1_status",&mode_status);
+			lcm.publish("mode2_status",&mode_status);
 		}
 				// change of target
 		/*
@@ -387,7 +387,7 @@ for (int scan_number=number_of_scans;scan_number>=1;scan_number--){ // we start 
                 
 		command.timestamp=get_timestamp();
 		
-                lcm.publish("MOTOR",&command);
+                lcm.publish("mode_2",&command);
 		cout<<" cmd: "<<command.L_power<<"    "<<command.R_power<< "       "<<largest_area<<endl;
 		//runMotors(L_power_int,R_power_int);
 #endif
