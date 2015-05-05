@@ -36,7 +36,7 @@ void modeOverride() {
     cout << "Enter override: [int]" << endl;
     cin >> over;
     com.command = over;
-    if(over==0) {
+    if(over==0||over>1) {
 	cout << "Command not recognized\n";
 	return;
     }
@@ -89,7 +89,6 @@ int main(int argc, char ** argv)
         return 1;
 
     haveData = false;
-    help();
 
     while(true)
     {
@@ -99,7 +98,6 @@ int main(int argc, char ** argv)
 	if(entry==0||entry>2) {
 	    cout << "Command not recognized\n";
 	    help();
-	    continue;
 	}
 	switch(entry) {
 	    case 1: modeOverride();

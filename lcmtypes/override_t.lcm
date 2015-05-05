@@ -1,0 +1,6 @@
+package avionics;
+
+struct override_t
+{
+    int16_t  command;
+}
