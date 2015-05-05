@@ -116,7 +116,7 @@ public class GPS_Navigation implements Runnable {
 			this.heading=wrapAngle(this.heading);
 			double delta_heading=this.heading-current.heading;
 			System.out.println("Distance:" +this.distance);
-			//delta_heading=wrapAngle(delta_heading);
+			delta_heading=wrapAngle(delta_heading);
 			controller.updateState(distance,delta_heading);
 			//System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
 		}

@@ -39,7 +39,7 @@ public class NavController {
 		double speed=0.0; 
 		double omega=0.0;
 		if(delta_dist<=1.5){
-			if(delta_heading<=1E-3){
+			if(delta_heading<=0.2){
 			this.done=true;
 			}
 		mode_msg.Status_ID=2;
@@ -77,6 +77,5 @@ public class NavController {
 			right=(int) (speed/2.0);
 			left= (int) (speed/2.0+(omega));
 		}
-		
 }
 
