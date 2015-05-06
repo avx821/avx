@@ -3,7 +3,7 @@ package avionics;
 struct navio_gps_t
 {
     int64_t  timestamp;
-    double   lat;
-    double   lon;
-    double   alt;
+    long   lat;
+    long  lon;
+    long   alt;
 }
