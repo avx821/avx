@@ -325,11 +325,7 @@ HSV_filter::HSV_filter(Color target_color)
 
 
 
-
-	switch (target_color)
-	{
-		case yellow:
-		//yelow dock hopefully
+/*
         H_low=88;
         S_low=107;
         V_low=176;
@@ -337,19 +333,32 @@ HSV_filter::HSV_filter(Color target_color)
         H_high=102;
         S_high=255;
         V_high=255;
-		break;
-		case red:
-		//red beacon
+*/
 
-        H_low=119;
+	switch (target_color)
+	{
+		case yellow:
+		//yelow dock hopefully
+        H_low=70;
         S_low=136;
-        V_low=176;
+        V_low=130;
 
-        H_high=137;
+        H_high=111;
         S_high=255;
         V_high=255;
 		break;
-		case green:
+		case green:  // INVERTED FOR TSTING
+		//red beacon
+
+        H_low=112;
+        S_low=150;
+        V_low=142;
+
+        H_high=134;
+        S_high=255;
+        V_high=255;
+		break;
+		case red:
 		//green beacon TODO ( recalibrate)
 
         H_low=30;
@@ -362,6 +371,7 @@ HSV_filter::HSV_filter(Color target_color)
 		break;
 	}
 //-------------------- for lab use
+/*
 	switch (target_color)
 	{
 		case yellow:
@@ -397,7 +407,7 @@ HSV_filter::HSV_filter(Color target_color)
         V_high=255;
 		break;
 	}
-	
+*/	
 }
 
 //makes x>y

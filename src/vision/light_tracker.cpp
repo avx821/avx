@@ -21,14 +21,14 @@ unsigned long long TIME;
 
 #define RUN_MOTORS 1
 #define OMP_WAIT_POLICY PASSIVE
-#define OWN_CV 0
+#define OWN_CV 1
 #define CAMERA_LOG 0
-#define DISPLAY 1
+#define DISPLAY 0
 #define SWITCHING 0
 //TODO set the environment variable
 // global variables
-double WIDTH = 1920;	// frame width
-double HEIGHT = 1080; // frame height
+double WIDTH = 800;	// frame width
+double HEIGHT = 600; // frame height
 double L_power =0;
 double R_power =0;
 double TAU=1;
@@ -61,7 +61,7 @@ options_c::options_c()
     trackbar=false;
     equalization=false;
     morphological=false;
-    roi=false;
+    roi=true;
     save_video=false;
     power=20;
     area=25;
@@ -107,8 +107,10 @@ if(-1==fd){
 #if OWN_CV
     if(!options.trackbar){
 	filter_beacon_green.update_filter_table();
+	
 #if SWITCHING
 	filter_dock.update_filter_table();
+	
 	filter_beacon_red.update_filter_table();
 #endif
 
@@ -140,8 +142,8 @@ if(-1==fd){
     bool thresholded_ready=false;
     cout<<"FPS: "<<inputVideo.get(CV_CAP_PROP_FPS)<<endl;
 
-    inputVideo.set(CV_CAP_PROP_FRAME_WIDTH,640);
-    inputVideo.set(CV_CAP_PROP_FRAME_HEIGHT,480);
+    inputVideo.set(CV_CAP_PROP_FRAME_WIDTH,1920);
+    inputVideo.set(CV_CAP_PROP_FRAME_HEIGHT,1080);
 
     cout<<HEIGHT<<endl;
     WIDTH=inputVideo.get(CV_CAP_PROP_FRAME_WIDTH);

@@ -5,7 +5,7 @@ public class NavController {
 	int right; 
 	int left;
 	final double _tolerance=1E-6; 
-	final double MAX_VELOCITY=20; 
+	final double MAX_VELOCITY=10; 
 	final double MIN_VELOCITY=2;
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
