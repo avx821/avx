@@ -16,6 +16,7 @@ public class GPS_Navigation implements Runnable {
 	 final static double _tolerance=1E-6; 
 	 double omega=0.0;
 	 double speed=0.0;
+	 double circle_heading=0.01;
 	 boolean Arrived=false;
 	public GPS_Navigation(PointGPS start, PointGPS goal){
 	//	this.podComm=pComm;
@@ -127,6 +128,20 @@ public class GPS_Navigation implements Runnable {
 			controller.updateState(distance,delta_heading);
 			//System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
 		}
+		while(controller.isDone()){
+			driveCircle();
+			try{
+			Thread.sleep(10);
+			}catch(InterruptedException ex){
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	public void driveCircle(){
+			controller.updateState(0.0,circle_heading); 
+			circle_heading++;
+	}
 		/*
  **
  * Uncomment when pod communication ability is available
