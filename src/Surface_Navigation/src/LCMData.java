@@ -48,8 +48,7 @@ public class LCMData implements LCMSubscriber,Runnable {
 		return pos;
 		}
 
-		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
-		    {
+		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins){
 		    //  System.out.println("Received message on channel:  " + channel); 
 		        try {
 		            if (channel.contains("gps")) {
@@ -63,19 +62,18 @@ public class LCMData implements LCMSubscriber,Runnable {
 		            	Heading_msg=new navio_imu_t(ins);
 		          //      System.out.println("  timestamp    = " + Heading_msg.timestamp);
 		              this.heading=calculateHeading();
-				System.out.println(" heading    = " +this.heading*180/Math.PI);
-				Thread.sleep(50);
-				if(this.heading!=Double.NaN){
-					this.connected=true;
-					}
+					System.out.println(" heading    = " +this.heading*180/Math.PI);
+						if(this.heading!=Double.NaN){
+						this.connected=true;
+						}
 		        	}
-			}catch (Exception ex) {
+				}catch (Exception ex) {
 		            System.out.println("Exception: " + ex);
 		        }
 			synchronized(this){
 			this.notifyAll();   
+			}
 		}
-	}
 		boolean isConnected(){
 			return connected;
 		}

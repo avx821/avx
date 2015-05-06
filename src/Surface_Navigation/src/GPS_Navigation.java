@@ -91,42 +91,26 @@ public class GPS_Navigation implements Runnable {
 	}
 	@Override
 	public void run() {
-		this.current=this.start;
-		synchronized(sysComm){
-		if(sysComm!=null) //|| sysComm.isConnected())
-		{
-			System.out.println("sysComm is working");
-			// update these to format in LCM data types
-			this.current=new PointGPS(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude()); 
-			this.current.setHeading(sysComm.getHeading());
-			System.out.println("Aircraft heading: "+this.current.getHeading());
-		}
-		else{
-			// get old value of current location from memory
-		}
-		}
-		
+		this.current=this.start;	
 		this.dest=this.calcWaypointfromPoint(RADIUS,this.dest,dest.heading);
-		this.heading=calcHaversineHeading(this.current,dest);
-		this.heading=wrapAngle(heading);
-		System.out.println("Required heading: "+this.heading);
+		System.out.println("Heading from vector:" +(Math.atan2(this.vec.getDelta_y, this.vec.getDelta_x)));
+		this.heading=wrapAngle(calcHaversineHeading(this.current,dest));
 		this.vec=this.PointGPStoVector(current,dest);
 		this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
 		while(!controller.isDone()){
 			long starttime=System.nanoTime();
 			synchronized(sysComm){
-			this.current.setHeading(sysComm.getHeading());
-			this.current.setNewPoint(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude());
+				if(sysComm!=null){
+				this.current.setHeading(sysComm.getHeading());
+				this.current.setNewPoint(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude());
+				}
 			}
 			this.vec=this.PointGPStoVector(this.current,dest);
 			this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
-			this.heading=this.calcHaversineHeading(this.current,dest);
-			this.heading=wrapAngle(this.heading);
 			double delta_heading=this.heading-current.heading;
 			System.out.println("Distance:" +this.distance);
 			delta_heading=wrapAngle(delta_heading);
 			controller.updateState(distance,delta_heading);
-			//System.out.println("Cycle Time:"+(System.nanoTime()-starttime));
 		}
 		while(controller.isDone()){
 			driveCircle();
