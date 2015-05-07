@@ -9,6 +9,9 @@
 #ifndef __avionics_navio_imu_t_hpp__
 #define __avionics_navio_imu_t_hpp__
 
+#include "avionics/int64.hpp"
+#include "avionics/int64.hpp"
+#include "avionics/int64.hpp"
 
 namespace avionics
 {
@@ -18,11 +21,11 @@ class navio_imu_t
     public:
         double     timestamp;
 
-        double     imu_pos[3];
+        avionics::int64 imu_pos[3];
 
-        double     imu_vel[3];
+        avionics::int64 imu_vel[3];
 
-        double     imu_acc[3];
+        avionics::int64 imu_acc[3];
 
     public:
         /**
@@ -123,14 +126,20 @@ int navio_imu_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_pos[a0]._encodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
-    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_vel[a0]._encodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
-    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_acc[a0]._encodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
     return pos;
 }
@@ -142,14 +151,20 @@ int navio_imu_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_pos[a0]._decodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
-    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_vel[a0]._decodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
-    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = this->imu_acc[a0]._decodeNoHash(buf, offset + pos, maxlen - pos);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
     return pos;
 }
@@ -158,15 +173,31 @@ int navio_imu_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
     enc_size += __double_encoded_array_size(NULL, 1);
-    enc_size += __double_encoded_array_size(NULL, 3);
-    enc_size += __double_encoded_array_size(NULL, 3);
-    enc_size += __double_encoded_array_size(NULL, 3);
+    for (int a0 = 0; a0 < 3; a0++) {
+        enc_size += this->imu_pos[a0]._getEncodedSizeNoHash();
+    }
+    for (int a0 = 0; a0 < 3; a0++) {
+        enc_size += this->imu_vel[a0]._getEncodedSizeNoHash();
+    }
+    for (int a0 = 0; a0 < 3; a0++) {
+        enc_size += this->imu_acc[a0]._getEncodedSizeNoHash();
+    }
     return enc_size;
 }
 
-int64_t navio_imu_t::_computeHash(const __lcm_hash_ptr *)
+int64_t navio_imu_t::_computeHash(const __lcm_hash_ptr *p)
 {
-    int64_t hash = 0xfcd7edb9116027bfLL;
+    const __lcm_hash_ptr *fp;
+    for(fp = p; fp != NULL; fp = fp->parent)
+        if(fp->v == navio_imu_t::getHash)
+            return 0;
+    const __lcm_hash_ptr cp = { p, (void*)navio_imu_t::getHash };
+
+    int64_t hash = 0xc3c799901442100eLL +
+         avionics::int64::_computeHash(&cp) +
+         avionics::int64::_computeHash(&cp) +
+         avionics::int64::_computeHash(&cp);
+
     return (hash<<1) + ((hash>>63)&1);
 }
 

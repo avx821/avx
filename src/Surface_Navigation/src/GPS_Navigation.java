@@ -160,7 +160,8 @@ public class GPS_Navigation implements Runnable {
 			pComm.run();*/
 		 	} catch (IOException e) {
 			// TODO Auto-generated catch block
-		e.printStackTrace();
+		System.out.println("Not running");
+			e.printStackTrace();
 		}
 		
 	 }

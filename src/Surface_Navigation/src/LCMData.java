@@ -58,18 +58,20 @@ public class LCMData implements LCMSubscriber,Runnable {
 			             this.latitude=GPS_msg.lat; 
 			             this.longitude=GPS_msg.lon; 
 			             this.altitude=GPS_msg.alt;
-		            	}
+		       		}
+			}catch(IOException ex){}
+			try{
 		            if (channel.contains("imu")) {
 		            	Heading_msg=new navio_imu_t(ins);
 		          //      System.out.println("  timestamp    = " + Heading_msg.timestamp);
-		              this.heading=calculateHeading();
+		             this.heading=calculateHeading();
 					System.out.println(" heading    = " +this.heading*180/Math.PI);
-						if(this.heading!=Double.NaN){
+					Thread.sleep(50);
+					if(this.heading!=Double.NaN){
 						this.connected=true;
 						}
-		        	}
-				}catch (Exception ex) {
-		            System.out.println("Exception: " + ex);
+			}	}catch (Exception ex) {
+		            System.out.println("Here-->Exception: " + ex);
 		        }
 			synchronized(this){
 			this.notifyAll();
@@ -79,16 +81,14 @@ public class LCMData implements LCMSubscriber,Runnable {
 			return connected;
 		}
 		public double calculateHeading() {
-			double magx=(Heading_msg.imu_pos[0]/20000.0)+0.25;
-			double magy=(Heading_msg.imu_pos[1]/18000.0)-6.35;
-			magx=this.filterx.getAverage(magx);
-			magy=this.filtery.getAverage(magy);
-			double magheading= Math.atan2(magx,magy) +(Math.PI/2.0);
-			if(Math.abs(magheading+Math.PI)<_tolerance){
-			magheading=magheading+360;
-			}
-			System.out.println("[magx,magy]:["+(Heading_msg.imu_pos[0]/1000.0)+", "+(Heading_msg.imu_pos[1]/1000.0)+"]");
-			//System.out.println("heading: "+magheading);
+			double magx=(double)(Heading_msg.imu_pos[0]/1000.0)-0.25;
+			double magy=(double)(Heading_msg.imu_pos[1]/1000.0)+0.35;
+			double magnorm=Math.sqrt(magx*magx + magy*magy);
+			magx=this.filterx.getAverage(magx/magnorm);
+			magy=this.filtery.getAverage(magy/magnorm);
+			double magheading= Math.atan2(magy,magx);
+			//System.out.println("[magx,magy]:["+(Heading_msg.imu_pos[0]/1000.0)+", "+(Heading_msg.imu_pos[1]/1000.0)+"]");
+			//System.out.println("heading: "+magheading);*/
 			return magheading;
 		}
 		@Override
