@@ -12,19 +12,19 @@ import lcm.lcm.*;
 public final class navio_imu_t implements lcm.lcm.LCMEncodable
 {
     public long timestamp;
-    public long imu_pos[];
-    public long imu_vel[];
-    public long imu_acc[];
+    public double imu_pos[];
+    public double imu_vel[];
+    public double imu_acc[];
  
     public navio_imu_t()
     {
-        imu_pos = new long[3];
-        imu_vel = new long[3];
-        imu_acc = new long[3];
+        imu_pos = new double[3];
+        imu_vel = new double[3];
+        imu_acc = new double[3];
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0x5901b945f3ac7f2dL;
+    public static final long LCM_FINGERPRINT_BASE = 0xca3ebaa28d24db34L;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -53,15 +53,15 @@ public final class navio_imu_t implements lcm.lcm.LCMEncodable
         outs.writeLong(this.timestamp); 
  
         for (int a = 0; a < 3; a++) {
-            outs.writeLong(this.imu_pos[a]); 
+            outs.writeDouble(this.imu_pos[a]); 
         }
  
         for (int a = 0; a < 3; a++) {
-            outs.writeLong(this.imu_vel[a]); 
+            outs.writeDouble(this.imu_vel[a]); 
         }
  
         for (int a = 0; a < 3; a++) {
-            outs.writeLong(this.imu_acc[a]); 
+            outs.writeDouble(this.imu_acc[a]); 
         }
  
     }
@@ -90,19 +90,19 @@ public final class navio_imu_t implements lcm.lcm.LCMEncodable
     {
         this.timestamp = ins.readLong();
  
-        this.imu_pos = new long[(int) 3];
+        this.imu_pos = new double[(int) 3];
         for (int a = 0; a < 3; a++) {
-            this.imu_pos[a] = ins.readLong();
+            this.imu_pos[a] = ins.readDouble();
         }
  
-        this.imu_vel = new long[(int) 3];
+        this.imu_vel = new double[(int) 3];
         for (int a = 0; a < 3; a++) {
-            this.imu_vel[a] = ins.readLong();
+            this.imu_vel[a] = ins.readDouble();
         }
  
-        this.imu_acc = new long[(int) 3];
+        this.imu_acc = new double[(int) 3];
         for (int a = 0; a < 3; a++) {
-            this.imu_acc[a] = ins.readLong();
+            this.imu_acc[a] = ins.readDouble();
         }
  
     }
@@ -112,11 +112,11 @@ public final class navio_imu_t implements lcm.lcm.LCMEncodable
         avionics.navio_imu_t outobj = new avionics.navio_imu_t();
         outobj.timestamp = this.timestamp;
  
-        outobj.imu_pos = new long[(int) 3];
+        outobj.imu_pos = new double[(int) 3];
         System.arraycopy(this.imu_pos, 0, outobj.imu_pos, 0, 3); 
-        outobj.imu_vel = new long[(int) 3];
+        outobj.imu_vel = new double[(int) 3];
         System.arraycopy(this.imu_vel, 0, outobj.imu_vel, 0, 3); 
-        outobj.imu_acc = new long[(int) 3];
+        outobj.imu_acc = new double[(int) 3];
         System.arraycopy(this.imu_acc, 0, outobj.imu_acc, 0, 3); 
         return outobj;
     }

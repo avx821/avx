@@ -3,7 +3,7 @@ package avionics;
 struct navio_imu_t
 {
     int64_t  timestamp;
-    int64_t   imu_pos[3];
-    int64_t   imu_vel[3];
-    int64_t   imu_acc[3];
+    double   imu_pos[3];
+    double   imu_vel[3];
+    double   imu_acc[3];
 }
