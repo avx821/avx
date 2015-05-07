@@ -14,7 +14,6 @@
 
 //Inclusions for IMU
 #include "/home/pi/Navio/C++/Navio/MPU9250.h"
-#include <iostream>
 
 unsigned long long get_timestamp(){
 	struct timeval tv;
@@ -50,23 +49,21 @@ int main(int argc, char ** argv)
 
 		//Store IMU data
 		imu.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-		data.imu_pos[0] = (double) mx;
-		data.imu_pos[1] = (double) my;
-		data.imu_pos[2] = (double) mz;
-		data.imu_vel[0] = (double) gx;
-		data.imu_vel[1] = (double) gy;
-		data.imu_vel[2] = (double) gz;
-		data.imu_acc[0] = (double) ax;
-		data.imu_acc[1] = (double) ay;
-		data.imu_acc[2] = (double) az;
-		double d = 1.2345;
-		d = (double) data.imu_pos[0];
-		cout << "imu_pos[] " << (double) data.imu_pos[0]<<" "<< d <<"\n";
+		data.imu_pos[0] = mx;
+		data.imu_pos[1] = my;
+		data.imu_pos[2] = mz;
+		data.imu_vel[0] = gx;
+		data.imu_vel[1] = gy;
+		data.imu_vel[2] = gz;
+		data.imu_acc[0] = ax;
+		data.imu_acc[1] = ay;
+		data.imu_acc[2] = az;
 
 	    //Publish it!
 	    lcm.publish("imu", &data);
-	    //Should be 0.005 for normal operation
-	    sleep(0.5);
+
+	    //Default IMU sleep duration
+	    sleep(0.05);
 	}
 
     return 0;

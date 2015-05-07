@@ -19,7 +19,7 @@ from serial import Serial
 from xbee import ZigBee
 
 #Serial to LCM Mapping
-RxLCMMap = ["05EBOLA","pod_data","plane_override"]  #LCM Messages to receive into plane
+RxLCMMap = ["05EBOLA","pod_data","OVERRIDE","imu"]  #LCM Messages to receive into plane
 TxLCMMap = ["05EBOLA","imu","gps"] 	#LCM Messages to Transmit out of plane
 
 #Setup Handler for LCM

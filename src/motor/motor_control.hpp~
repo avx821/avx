@@ -7,10 +7,12 @@
 #include <lcm/lcm-cpp.hpp>
 #include "I2Cdev.cpp"
 #include "../lcm_headers/cpp/avionics/motor_command_t.hpp"
+#include "../lcm_headers/cpp/avionics/state_machine_mode_t.hpp"
 
 
-#define NAVIO_RCOUTPUT_1 4
-#define NAVIO_RCOUTPUT_2 5
+#define NAVIO_RCOUTPUT_1 3
+#define NAVIO_RCOUTPUT_2 4
+#define NAVIO_RCOUTPUT_3 5
 int runMotors(double, double);
 
 extern PCA9685 pwm;

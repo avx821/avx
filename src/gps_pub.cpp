@@ -58,8 +58,9 @@ int main(int argc, char ** argv)
 			{
 				data.lon = pos_data[1]/10000000; //Longitude
 				data.lat = pos_data[2]/10000000; //Latitude
-				data.alt = pos_data[3]/10000000; //Altitude
-		//		cout << pos_data[1] << " " << pos_data[2] << " " << pos_data[3] << endl;
+				data.alt = pos_data[3]/1000; //Altitude
+			    printf("%f %f\n", data.lat, data.lon);
+
 			}
 			else
 			{

@@ -8,6 +8,7 @@ CMakeFiles/motor_controler.dir/motor_control.cpp.o: /home/pi/Navio/C++/Navio/PCA
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: /home/pi/Navio/C++/Navio/gpio.cpp
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: /home/pi/Navio/C++/Navio/gpio.h
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: ../lcm_headers/cpp/avionics/motor_command_t.hpp
+CMakeFiles/motor_controler.dir/motor_control.cpp.o: ../lcm_headers/cpp/avionics/state_machine_mode_t.hpp
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: motor_control.cpp
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: motor_control.hpp
 CMakeFiles/motor_controler.dir/motor_control.cpp.o: /usr/local/include/lcm/eventlog.h

@@ -16,13 +16,13 @@ namespace avionics
 class navio_imu_t
 {
     public:
-        int64_t    timestamp;
+        double     timestamp;
 
-        int64_t    imu_pos[3];
+        double     imu_pos[3];
 
-        int64_t    imu_vel[3];
+        double     imu_vel[3];
 
-        int64_t    imu_acc[3];
+        double     imu_acc[3];
 
     public:
         /**
@@ -120,16 +120,16 @@ int navio_imu_t::_encodeNoHash(void *buf, int offset, int maxlen) const
 {
     int pos = 0, tlen;
 
-    tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
+    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
+    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
+    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
+    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -139,16 +139,16 @@ int navio_imu_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 {
     int pos = 0, tlen;
 
-    tlen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
+    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->timestamp, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
+    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_pos[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
+    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_vel[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
+    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->imu_acc[0], 3);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -157,16 +157,16 @@ int navio_imu_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 int navio_imu_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
-    enc_size += __int64_t_encoded_array_size(NULL, 1);
-    enc_size += __int64_t_encoded_array_size(NULL, 3);
-    enc_size += __int64_t_encoded_array_size(NULL, 3);
-    enc_size += __int64_t_encoded_array_size(NULL, 3);
+    enc_size += __double_encoded_array_size(NULL, 1);
+    enc_size += __double_encoded_array_size(NULL, 3);
+    enc_size += __double_encoded_array_size(NULL, 3);
+    enc_size += __double_encoded_array_size(NULL, 3);
     return enc_size;
 }
 
 int64_t navio_imu_t::_computeHash(const __lcm_hash_ptr *)
 {
-    int64_t hash = 0x5901b945f3ac7f2dLL;
+    int64_t hash = 0xfcd7edb9116027bfLL;
     return (hash<<1) + ((hash>>63)&1);
 }
 
