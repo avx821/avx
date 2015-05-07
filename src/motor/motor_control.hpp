@@ -12,6 +12,10 @@
 
 #define NAVIO_RCOUTPUT_1 3
 #define NAVIO_RCOUTPUT_2 4
+#define NAVIO_RCOUTPUT_3 5
+
+#define SERVO_MIN 1.250 /*mS*/
+#define SERVO_MAX 1.750 /*mS*/
 int runMotors(double, double);
 
 extern PCA9685 pwm;
