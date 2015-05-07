@@ -2,7 +2,7 @@
 import java.io.IOException; import avionics.*; import lcm.lcm.*;
 
 public class LCMData implements LCMSubscriber,Runnable {
-		 LCM GPSdata_LCM,Heading_LCM;  
+		 LCM GPSdata_LCM,Heading_LCM;
 		 navio_gps_t GPS_msg;
 		 navio_imu_t Heading_msg;
 		 double latitude; 
@@ -48,8 +48,7 @@ public class LCMData implements LCMSubscriber,Runnable {
 		return pos;
 		}
 
-		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins)
-		    {
+		public synchronized void messageReceived(LCM lcm, String channel, LCMDataInputStream ins){
 		    //  System.out.println("Received message on channel:  " + channel); 
 		        try {
 		            if (channel.contains("gps")) {
@@ -63,42 +62,32 @@ public class LCMData implements LCMSubscriber,Runnable {
 		            	Heading_msg=new navio_imu_t(ins);
 		          //      System.out.println("  timestamp    = " + Heading_msg.timestamp);
 		              this.heading=calculateHeading();
-				System.out.println(" heading    = " +this.heading*180/Math.PI);
-				Thread.sleep(50);
-				if(this.heading!=Double.NaN){
-					this.connected=true;
-					}
+					System.out.println(" heading    = " +this.heading*180/Math.PI);
+						if(this.heading!=Double.NaN){
+						this.connected=true;
+						}
 		        	}
-			}catch (Exception ex) {
+				}catch (Exception ex) {
 		            System.out.println("Exception: " + ex);
 		        }
 			synchronized(this){
 			this.notifyAll();   
+			}
 		}
-	}
 		boolean isConnected(){
 			return connected;
 		}
 		public double calculateHeading() {
-			long[] imu_pos=Heading_msg.imu_pos; 
-			//long[] imu_vel=Heading_msg.imu_vel; 
-			//long[] imu_acc=Heading_msg.imu_acc;
-			//double mag_norm=(double) Math.sqrt((imu_pos[0]*imu_pos[0])+(imu_pos[1]*imu_pos[1])+(imu_pos[2]*imu_pos[2]));
-			double magx=(double) (-0.04691*imu_pos[0])-0.045167;
-			double magy=(double) (-0.04194*imu_pos[1])+1.2;
+			double magx=Heading_msg.imu_pos[0];
+			double magy=Heading_msg.imu_pos[1];
 			magx=this.filterx.getAverage(magx);
 			magy=this.filtery.getAverage(magy);
-			//double magz=(double) (imu_pos[2]/mag_norm);
-			//double Pitch=Math.atan2(imu_acc[1],imu_acc[2]);
-			//double Roll=Math.atan2(imu_acc[0],imu_acc[2]);
-			//double delta_my= magy*Math.cos(Roll)+magz*Math.sin(Roll);
-			//double delta_mx=magx*Math.cos(Pitch)+magy*Math.sin(Pitch)*Math.sin(Roll)-magz*Math.sin(Pitch)*Math.cos(Roll);
-			double magheading= -Math.atan2(magy,magx) ;
-			/*if(magx<(-_tolerance)){
-			magheading-=0.34;
-			magheading=(2*Math.PI)+magheading;
+			double magheading= Math.atan2(magx,magy);//+(Math.PI/2.0);
+			/*if(Math.abs(magheading+Math.PI)<_tolerance){
+			magheading=magheading+360;
 			}*/
-			System.out.println("[magx,magy]:["+magx+", "+magy+"]");
+			//System.out.println("[magx,magy]:["+magx+", "+magy+"]");
+			//System.out.println("heading: "+magheading);
 			return magheading;
 		}
 		@Override

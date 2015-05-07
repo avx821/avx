@@ -1,11 +1,11 @@
-import lcm.lcm.*; 
-import avionics.*; 
+import lcm.lcm.*;
+import avionics.*;
 public class NavController {
 	boolean done=false;
 	int right; 
 	int left;
 	final double _tolerance=1E-6; 
-	final double MAX_VELOCITY=20; 
+	final double MAX_VELOCITY=10; 
 	final double MIN_VELOCITY=2;
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
@@ -40,6 +40,8 @@ public class NavController {
 		double omega=0.0;
 		if(delta_dist<=1.5){
 			if(delta_heading<=0.2){
+				speed=0.0;
+				omega=0.0;
 			this.done=true;
 			}
 		mode_msg.Status_ID=2;
@@ -65,7 +67,7 @@ public class NavController {
 			trans_vel=MAX_VELOCITY/4.0;
 		}
 		else if((delta_dist-NEAR_DISTANCE)<=_tolerance){
-			trans_vel=MIN_VELOCITY/2.0;
+			trans_vel=MIN_VELOCITY/4.0;
 		}
 		return trans_vel;
 	}
