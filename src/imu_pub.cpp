@@ -65,8 +65,14 @@ int main(int argc, char ** argv)
 
 	    //Publish it!
 	    lcm.publish("imu", &data);
+<<<<<<< HEAD
 	    //Should be 0.005 for normal operation
 	    sleep(0.5);
+=======
+
+	    //Default IMU sleep duration
+	    //sleep(0.05);
+>>>>>>> 8c4827ba2ba1d9163b7840768d44df62c3fa9428
 	}
 
     return 0;
