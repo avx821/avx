@@ -9,4 +9,4 @@ echo "starting imu publishing"
 #echo "running GPS Nav code"
 ./../../gps_pub &
 #./../../../../Downloads/lcm/lcm-logger
-java -cp lcm.jar:avionics.jar:. GPS_Navigation 0.0001 0.0 0.0
+java -cp lcm.jar:avionics.jar:. GPS_Navigation -0.001 0.0 0.0

@@ -6,8 +6,8 @@ public class NavController {
 	int right; 
 	int left;
 	final double _tolerance=1E-6; 
-	final double MAX_VELOCITY=10; 
-	final double MIN_VELOCITY=2;
+	final double MAX_VELOCITY=20;// dont reduce below 4.0
+	final double MIN_VELOCITY=MAX_VELOCITY/4.0;
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
 	motor_command_t motor_msg; // change when lcm message is known
@@ -25,7 +25,7 @@ public class NavController {
 		motor_msg.timestamp = System.nanoTime();
 		motor_msg.L_power=left; 
 		motor_msg.R_power=right;
-		//System.out.println("Publishing motor commands [L,R]: ["+motor_msg.L_power+", "+motor_msg.R_power+"]");
+		System.out.println("Publishing motor commands [L,R]: ["+motor_msg.L_power+", "+motor_msg.R_power+"]");
 		lcm.publish("mode_1",motor_msg);	
 	}
 	boolean isDone(){
@@ -52,6 +52,7 @@ public class NavController {
 			this.done=false;
 			speed=this.calcTransvel(delta_dist);
 			omega=this.calcRotvel(delta_heading);
+			System.out.println("Omega: "+omega+", Speed: "+speed);
 			mode_msg.Status_ID=1;
 		lcm.publish("mode1_status", mode_msg);
 		}
@@ -62,13 +63,13 @@ public class NavController {
 	double calcTransvel(double delta_dist){
 		double trans_vel=0.0;
 		if((delta_dist-FAR_DISTANCE)>_tolerance){
-			trans_vel=MAX_VELOCITY/2.0;
+			trans_vel=MAX_VELOCITY;
 		}
 		else if(((delta_dist-NEAR_DISTANCE)>_tolerance) && ((delta_dist-FAR_DISTANCE)<=_tolerance)){
-			trans_vel=MAX_VELOCITY/4.0;
+			trans_vel=MAX_VELOCITY/2.0;
 		}
 		else if((delta_dist-NEAR_DISTANCE)<=_tolerance){
-			trans_vel=MIN_VELOCITY/4.0;
+			trans_vel=MIN_VELOCITY;
 		}
 		return trans_vel;
 	}
@@ -78,7 +79,13 @@ public class NavController {
 	}
 	void generateMotorCommand(double speed, double omega){
 			right=(int) (speed/2.0);
-			left= (int) (speed/2.0+(omega));
+			left= (int) (speed/2.0-(omega));
+		if(right<0){
+		right=0;
+		}
+		if(left<0){
+		left=0;
+		}
 		}
 }
 
