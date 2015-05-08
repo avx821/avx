@@ -65,8 +65,8 @@ public class LCMData implements LCMSubscriber,Runnable {
 		            	Heading_msg=new navio_imu_t(ins);
 		          //      System.out.println("  timestamp    = " + Heading_msg.timestamp);
 		             this.heading=calculateHeading();
-					System.out.println(" heading    = " +this.heading*180/Math.PI);
-					Thread.sleep(50);
+				//	System.out.println(" heading    = " +this.heading*180/Math.PI);
+				//	Thread.sleep(50);
 					if(this.heading!=Double.NaN){
 						this.connected=true;
 						}

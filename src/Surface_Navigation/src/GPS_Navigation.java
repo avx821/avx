@@ -92,16 +92,14 @@ public class GPS_Navigation implements Runnable {
 		while(!controller.isDone()){
 			long starttime=System.nanoTime();
 			synchronized(sysComm){
-				if(sysComm!=null){
 				this.current.setHeading(sysComm.getHeading());
 				this.current.setNewPoint(sysComm.getLatitude(),sysComm.getLongitude(),sysComm.getAltitude());
-				}
 			}
 			this.vec=this.PointGPStoVector(this.current,dest);
 			this.distance=Math.sqrt(this.vec.getDelta_x()*this.vec.getDelta_x() + this.vec.getDelta_y()*this.vec.getDelta_y());
 			double delta_heading=this.heading-current.heading;
 			delta_heading=wrapAngle(delta_heading);
-		//	System.out.println("Distance:" +this.distance+", Heading: "+(this.current.getHeading()*180/Math.PI)+", delta_heading: "+(delta_heading*180/Math.PI));
+			System.out.println("Distance:" +this.distance+", Current Heading: "+(this.current.getHeading()*180/Math.PI)+", delta_heading: "+(delta_heading*180/Math.PI));
 			controller.updateState(distance,delta_heading);
 		}
 		/*while(controller.isDone()){
