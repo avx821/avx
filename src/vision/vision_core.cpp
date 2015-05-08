@@ -162,7 +162,7 @@ int update_FPS_and_status(bool detection,int frame_time)
 search_status::search_status(){
 	cycle_period=20;
 	cycle=cycle_period-1;
-	primary=target(green);
+	primary=target(yellow);
 	secondary=target(none);
 	last_secondary=red;
 }
@@ -333,6 +333,13 @@ HSV_filter::HSV_filter(Color target_color)
         H_high=102;
         S_high=255;
         V_high=255;
+ H_low=70;
+        S_low=136;
+        V_low=130;
+
+        H_high=111;
+        S_high=255;
+        V_high=255;
 */
 
 	switch (target_color)
@@ -340,10 +347,10 @@ HSV_filter::HSV_filter(Color target_color)
 		case yellow:
 		//yelow dock hopefully
         H_low=70;
-        S_low=136;
-        V_low=130;
+        S_low=150;
+        V_low=150;
 
-        H_high=111;
+        H_high=106;
         S_high=255;
         V_high=255;
 		break;

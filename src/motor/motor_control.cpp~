@@ -103,6 +103,8 @@ int main(int,char**)
 
     while(0==lcm.handle()) {
         mode = state.getCurrentMode();
+	
+	mode=2;
 
         if (mode == 1) {
             runMotors(mode1.getLeftPower(),mode1.getRightPower());
@@ -123,12 +125,18 @@ int main(int,char**)
 int runMotors(double leftPercentInput, double rightPercentInput)
 {
 	
-    int leftPercent=(int)100*sqrt((leftPercentInput/100));
-    int rightPercent=(int)100*sqrt((rightPercentInput/100));
+    int leftPercent=(int)45*sqrt((leftPercentInput/100));
+    int rightPercent=(int)45*sqrt((rightPercentInput/100));
 
+    // motor
     pwm.setPWM(NAVIO_RCOUTPUT_1, 205+205*leftPercent/100);
     pwm.setPWM(NAVIO_RCOUTPUT_2, 205+205*rightPercent/100);
-    pwm.setPWMmS(NAVIO_RCOUTPUT_1, SERVO_MIN);
+//double rightBalance;
+    //rudder
+   // if (leftPercentInput+rightPercentInput>0)
+   // rightBalance=rightPercentInput/(leftPercentInput+rightPercentInput);
+//else rightBalance=0.5;
+ //   pwm.setPWMmS(NAVIO_RCOUTPUT_3, SERVO_MIN + (SERVO_MAX-SERVO_MIN)*rightBalance);
 
 	// pwm.setPWM(NAVIO_RCOUTPUT_1, 250);       
 //pwm.setPWM(NAVIO_RCOUTPUT_2, 250);

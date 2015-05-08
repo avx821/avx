@@ -27,8 +27,8 @@ unsigned long long TIME;
 #define SWITCHING 0
 //TODO set the environment variable
 // global variables
-double WIDTH = 800;	// frame width
-double HEIGHT = 600; // frame height
+double WIDTH = 640;	// frame width
+double HEIGHT = 480; // frame height
 double L_power =0;
 double R_power =0;
 double TAU=1;
@@ -106,11 +106,12 @@ if(-1==fd){
     HSV_filter *filter;
 #if OWN_CV
     if(!options.trackbar){
-	filter_beacon_green.update_filter_table();
+	filter_dock.update_filter_table();
+
 	
 #if SWITCHING
-	filter_dock.update_filter_table();
 	
+	filter_beacon_green.update_filter_table();
 	filter_beacon_red.update_filter_table();
 #endif
 
@@ -142,8 +143,8 @@ if(-1==fd){
     bool thresholded_ready=false;
     cout<<"FPS: "<<inputVideo.get(CV_CAP_PROP_FPS)<<endl;
 
-    inputVideo.set(CV_CAP_PROP_FRAME_WIDTH,1920);
-    inputVideo.set(CV_CAP_PROP_FRAME_HEIGHT,1080);
+    inputVideo.set(CV_CAP_PROP_FRAME_WIDTH,640);
+    inputVideo.set(CV_CAP_PROP_FRAME_HEIGHT,480);
 
     cout<<HEIGHT<<endl;
     WIDTH=inputVideo.get(CV_CAP_PROP_FRAME_WIDTH);
