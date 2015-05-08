@@ -57,7 +57,7 @@ public class GPS_Navigation implements Runnable {
 	double wrapAngle(double angle){
 			angle=angle%(2.0*Math.PI); 
 			if(angle>Math.PI){
-				angle=(2.0*Math.PI)-angle; 
+				angle=-(2.0*Math.PI)+angle; 
 			}
 			else if(angle<-Math.PI){
 				angle=(2.0*Math.PI)+angle;

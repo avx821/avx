@@ -6,8 +6,8 @@ public class NavController {
 	int right; 
 	int left;
 	final double _tolerance=1E-6; 
-	final double MAX_VELOCITY=20;// dont reduce below 4.0
-	final double MIN_VELOCITY=MAX_VELOCITY/4.0;
+	final double MAX_VELOCITY=100.0;// dont reduce below 4.0
+	final double MIN_VELOCITY=MAX_VELOCITY/2.0;
 	final double FAR_DISTANCE=50.0; 
 	final double NEAR_DISTANCE=20.0;
 	motor_command_t motor_msg; // change when lcm message is known
@@ -39,7 +39,7 @@ public class NavController {
 	void updateState(double delta_dist, double delta_heading){
 		double speed=0.0; 
 		double omega=0.0;
-		if(delta_dist<=1.5){
+		if(delta_dist<=1){
 			if(delta_heading<=0.2){
 				speed=0.0;
 				omega=0.0;
@@ -78,8 +78,8 @@ public class NavController {
 		return delta_heading*(MIN_VELOCITY/Math.PI);
 	}
 	void generateMotorCommand(double speed, double omega){
-			right=(int) (speed/2.0);
-			left= (int) (speed/2.0-(omega));
+			right=(int) ((speed/2.0)-omega);
+			left= (int) (speed/2.0+(omega));
 		if(right<0){
 		right=0;
 		}

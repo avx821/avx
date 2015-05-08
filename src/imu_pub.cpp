@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
 		data.imu_acc[0] =  ax;
 		data.imu_acc[1] =  ay;
 		data.imu_acc[2] =  az;
-		cout << "imu_pos[] " << (double) data.imu_pos[0] <<" "<< (double) data.imu_pos[1]<<"\n";
+		//cout << "imu_pos[] " << (double) data.imu_pos[0] <<" "<< (double) data.imu_pos[1]<<"\n";
 
 	    //Publish it!
 	    lcm.publish("imu", &data);

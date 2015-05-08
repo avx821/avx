@@ -104,7 +104,7 @@ int main(int,char**)
     while(0==lcm.handle()) {
         mode = state.getCurrentMode();
 	
-	mode=2;
+	mode=1;
 
         if (mode == 1) {
             runMotors(mode1.getLeftPower(),mode1.getRightPower());

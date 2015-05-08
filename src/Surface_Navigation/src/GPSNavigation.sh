@@ -4,9 +4,5 @@
 #javac -cp lcm.jar:. avionics/*.java
 #jar cvf avionics.jar avionics/*.class
 javac -cp lcm.jar:avionics.jar:. *.java &&
-echo "starting imu publishing"
-./../../imu_pub &
-#echo "running GPS Nav code"
-./../../gps_pub &
 #./../../../../Downloads/lcm/lcm-logger
-java -cp lcm.jar:avionics.jar:. GPS_Navigation -0.001 0.0 0.0
+java -cp lcm.jar:avionics.jar:. GPS_Navigation 42.360 -71.0943 0.0

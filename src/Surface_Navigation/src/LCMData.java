@@ -81,12 +81,14 @@ public class LCMData implements LCMSubscriber,Runnable {
 			return connected;
 		}
 		public double calculateHeading() {
-			double magx=(double)(Heading_msg.imu_pos[0]/1000.0)-0.25;
-			double magy=(double)(Heading_msg.imu_pos[1]/1000.0)+0.35;
-			double magnorm=Math.sqrt(magx*magx + magy*magy);
-			magx=this.filterx.getAverage(magx/magnorm);
-			magy=this.filtery.getAverage(magy/magnorm);
-			double magheading= Math.atan2(magy,magx);
+			double magx=(double)(Heading_msg.imu_pos[0]/1000.0);
+			double magy=(double)(Heading_msg.imu_pos[1]/1000.0);
+			//double magnorm=Math.sqrt(magx*magx + magy*magy);
+			magx=(magx/22.0)+0.7;
+			magy=(magy/20)-5.8;
+			magx=this.filterx.getAverage(magx);
+			magy=this.filtery.getAverage(magy);
+			double magheading= Math.atan2(-magy,magx);
 			//System.out.println("[magx,magy]:["+(Heading_msg.imu_pos[0]/1000.0)+", "+(Heading_msg.imu_pos[1]/1000.0)+"]");
 			//System.out.println("heading: "+magheading);*/
 			return magheading;
