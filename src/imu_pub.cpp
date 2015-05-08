@@ -50,29 +50,24 @@ int main(int argc, char ** argv)
 
 		//Store IMU data
 		imu.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-		data.imu_pos[0] = (double) mx;
-		data.imu_pos[1] = (double) my;
-		data.imu_pos[2] = (double) mz;
-		data.imu_vel[0] = (double) gx;
-		data.imu_vel[1] = (double) gy;
-		data.imu_vel[2] = (double) gz;
-		data.imu_acc[0] = (double) ax;
-		data.imu_acc[1] = (double) ay;
-		data.imu_acc[2] = (double) az;
-		double d = 1.2345;
-		d = (double) data.imu_pos[0];
-		cout << "imu_pos[] " << (double) data.imu_pos[0]<<" "<< d <<"\n";
+		data.imu_pos[0] = (long) (mx*1000.0);
+		data.imu_pos[1] = (long) (my*1000.0);
+		data.imu_pos[2] = (long) (mz*1000.0);
+		data.imu_vel[0] =  gx;
+		data.imu_vel[1] =  gy;
+		data.imu_vel[2] =  gz;
+		data.imu_acc[0] =  ax;
+		data.imu_acc[1] =  ay;
+		data.imu_acc[2] =  az;
+		cout << "imu_pos[] " << (double) data.imu_pos[0] <<" "<< (double) data.imu_pos[1]<<"\n";
 
 	    //Publish it!
 	    lcm.publish("imu", &data);
-<<<<<<< HEAD
-	    //Should be 0.005 for normal operation
+	    //Should be 0.5 for normal operation
 	    sleep(0.5);
-=======
 
 	    //Default IMU sleep duration
 	    //sleep(0.05);
->>>>>>> 8c4827ba2ba1d9163b7840768d44df62c3fa9428
 	}
 
     return 0;

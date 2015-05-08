@@ -1,7 +1,7 @@
 public class MovingFilter{
 	double[] sum;
-	final int fnum=10;
-	double[] data={0.0,0.0,0.0,0.0,0.0,
+	final int fnum=12;
+	double[] data={0.0,0.0,0.0,0.0,0.0,0.0,0.0,
 			0.0,0.0,0.0,0.0,0.0,
 			};
 	int counter=0;

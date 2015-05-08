@@ -73,8 +73,8 @@ public class PodLCMData implements LCMSubscriber,Runnable {
 		boolean isConnected(){
 			return connected;
 		}
-		public double calculateHeading(navio_imu_t) {
-			double magheading= Heading_msg.heading-Math.PI;
+		public double calculateHeading() {
+			double magheading= Heading_msg.heading-Math.PI();
 			return magheading;
 		}
 		@Override
