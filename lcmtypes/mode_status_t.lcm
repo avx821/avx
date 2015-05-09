@@ -1,0 +1,6 @@
+package avionics;
+
+struct mode_status_t {
+	int32_t Mode_ID;
+	int32_t Status_ID;
+}

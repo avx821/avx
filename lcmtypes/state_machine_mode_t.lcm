@@ -1,0 +1,5 @@
+package avionics;
+
+struct state_machine_mode_t {
+	int32_t Mode_ID;
+}
